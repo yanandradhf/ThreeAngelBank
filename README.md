@@ -1,12 +1,38 @@
-# React + Vite
+# 🏦 ThreeAngelBank — React Mastery Roadmap Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ThreeAngelBank adalah aplikasi simulasi manajemen keuangan pribadi. Dibuat untuk mengikuti roadmap pembelajaran React dari dasar hingga mahir (Level 1–10), proyek ini mendemonstrasikan best practices menggunakan React, Tailwind CSS, Zustand, dan JSON Server.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Fitur Utama Berdasarkan Level
 
-## Expanding the ESLint configuration
+| Level | Fitur                           | Skill React                    |
+| ----- | ------------------------------- | ------------------------------ |
+| 1     | Login/Register                  | useState, fetch API, form      |
+| 2     | Dashboard User                  | Context API, global state      |
+| 3     | Transaksi dan Penyimpanan lokal | localStorage, filtering        |
+| 4     | Aktivitas session               | sessionStorage, action logging |
+| 5     | Kategori Transaksi              | Custom hooks, drag & drop      |
+| 6     | Wizard Transfer                 | Zustand, multi-step form       |
+| 7     | Grafik Pengeluaran              | useEffect, Chart.js, realtime  |
+| 8     | Switch Multi-Akun               | Context switching, sync state  |
+| 9     | Offline Mode                    | IndexedDB, sync saat online    |
+| 10    | Admin Dashboard                 | Integrasi lengkap, ErrorBound  |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧰 Tech Stack
+
+- ⚛️ **React + Vite**
+- 🌬️ **Tailwind CSS**
+- 📦 **Zustand** (global state)
+- 🌐 **React Router DOM**
+- 📊 **Chart.js** (grafik)
+- 🛠 **JSON Server** (Mock REST API)
+- 💾 `localStorage`, `sessionStorage`, `IndexedDB`
+
+---
+
+git clone https://github.com/yanandradhf/ThreeAngelBank.git
+cd ThreeAngelBank
+npm install
