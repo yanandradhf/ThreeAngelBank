@@ -5,27 +5,63 @@ export default function UserDashboardComponent() {
   const [accounts, setAccounts] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ account_type: "", account_balance: "" });
+  const [loading, setLoading] = useState(true); // Tambah loading state
+  const [error, setError] = useState(null);
+
   const user = JSON.parse(localStorage.getItem("user"));
   const { getAccountsByUserId, addAccount } = useAccount();
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchAccounts = async () => {
+      try {
+        setLoading(true);
+        const data = await getAccountsByUserId(user?.id);
+        if (isMounted) setAccounts(data);
+      } catch (err) {
+        console.error("Error fetching accounts:", err);
+        setError("Gagal mengambil data rekening");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
     if (user?.id) {
-      getAccountsByUserId(user.id).then(setAccounts);
+      fetchAccounts();
     }
-  }, [user]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user?.id]);
 
   const handleAddAccount = async (e) => {
     e.preventDefault();
-    if (!form.account_type || !form.account_balance)
-      return alert("Lengkapi data!");
-    const newAcc = await addAccount({
-      user_id: user.id,
-      account_type: form.account_type,
-      account_balance: Number(form.account_balance),
-    });
-    setAccounts((prev) => [...prev, newAcc]);
-    setForm({ account_type: "", account_balance: "" });
-    setShowForm(false);
+    if (!form.account_type || !form.account_balance) {
+      return alert("Lengkapi data rekening terlebih dahulu!");
+    }
+
+    try {
+      const newAcc = await addAccount({
+        user_id: user.id,
+        account_type: form.account_type,
+        account_balance: Number(form.account_balance),
+      });
+
+      setAccounts((prev) => [...prev, newAcc]);
+      setForm({ account_type: "", account_balance: "" });
+      setShowForm(false);
+    } catch (err) {
+      if (err.response?.status === 429) {
+        alert(
+          "Terlalu banyak permintaan. Silakan coba lagi dalam beberapa detik."
+        );
+      } else {
+        console.error("Gagal menambahkan rekening:", err);
+        alert("Terjadi kesalahan saat menyimpan rekening.");
+      }
+    }
   };
 
   const totalBalance = accounts.reduce(
@@ -33,12 +69,29 @@ export default function UserDashboardComponent() {
     0
   );
 
+  if (loading) {
+    return (
+      <div className="p-6 max-w-5xl mx-auto text-center text-gray-500">
+        Memuat data rekening...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6 max-w-5xl mx-auto text-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold text-gray-800">
         Welcome, {user?.user_firstname}
       </h2>
 
+      {/* Total Balance */}
       <div className="bg-white rounded-xl shadow p-4">
         <p className="text-lg font-semibold text-gray-700">Total Balance</p>
         <p className="text-2xl font-bold text-green-600">
@@ -46,11 +99,12 @@ export default function UserDashboardComponent() {
         </p>
       </div>
 
+      {/* Account List */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {accounts.map((acc) => (
           <div key={acc.id} className="bg-white rounded-xl shadow p-4">
             <p className="text-sm text-gray-500 mb-1">
-              {acc.account_type.toUpperCase()}
+              {acc.account_type?.toUpperCase()}
             </p>
             <p className="text-md font-semibold text-gray-700">
               No: {acc.account_number}
@@ -65,6 +119,7 @@ export default function UserDashboardComponent() {
         ))}
       </div>
 
+      {/* Form */}
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}

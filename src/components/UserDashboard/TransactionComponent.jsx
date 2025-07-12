@@ -10,6 +10,7 @@ import {
   Legend,
 } from "recharts";
 import { useTransaction } from "../../hooks/useTransaction";
+import { useAccount } from "../../hooks/useAccount";
 
 // Warna untuk tiap jenis transaksi
 const COLORS = {
@@ -21,27 +22,52 @@ const COLORS = {
 
 export default function UserTransactions() {
   const [transactions, setTransactions] = useState([]);
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccountId, setSelectedAccountId] = useState("all");
   const [filterType, setFilterType] = useState("all");
   const [loading, setLoading] = useState(true);
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const { getTransactionsByAccount } = useTransaction();
+  const { getAllTransactionsByUser } = useTransaction();
+  const { getAccountsByUserId } = useAccount();
 
-  // Ambil data saat mount
   useEffect(() => {
-    if (user) {
-      getTransactionsByAccount(user.id).then((data) => {
-        setTransactions(data || []);
-        setLoading(false);
-      });
-    }
-  }, [user]);
+    let isFetched = false;
 
-  // Filter transaksi sesuai pilihan dropdown
+    const fetchData = async () => {
+      if (!user?.id || isFetched) return;
+
+      isFetched = true;
+      try {
+        const [tx, acc] = await Promise.all([
+          getAllTransactionsByUser(user.id),
+          getAccountsByUserId(user.id),
+        ]);
+
+        setTransactions(tx || []);
+        setAccounts(acc || []);
+      } catch (err) {
+        console.error("⚠️ Gagal fetch data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Filter transaksi berdasarkan jenis & akun
   const filtered =
-    filterType === "all"
+    filterType === "all" && selectedAccountId === "all"
       ? transactions
-      : transactions.filter((tx) => tx.transaction_type === filterType);
+      : transactions.filter((tx) => {
+          const byType =
+            filterType === "all" || tx.transaction_type === filterType;
+          const byAccount =
+            selectedAccountId === "all" ||
+            String(tx.account_id_sender) === selectedAccountId;
+          return byType && byAccount;
+        });
 
   // Siapkan data untuk chart
   const chartData = filtered.map((tx) => ({
@@ -56,20 +82,40 @@ export default function UserTransactions() {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold text-gray-800">Riwayat Transaksi</h2>
 
-      {/* Filter Dropdown */}
-      <div className="flex items-center gap-3">
-        <label className="font-medium">Filter:</label>
-        <select
-          className="border rounded px-2 py-1"
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-        >
-          <option value="all">Semua</option>
-          <option value="deposit">Deposit</option>
-          <option value="withdraw">Withdraw</option>
-          <option value="outgoing_transfer">Transfer Keluar</option>
-          <option value="incoming_transfer">Transfer Masuk</option>
-        </select>
+      {/* Filter Dropdowns */}
+      <div className="flex items-center gap-4 flex-wrap">
+        {/* Filter Jenis Transaksi */}
+        <div className="flex items-center gap-2">
+          <label className="font-medium">Jenis:</label>
+          <select
+            className="border rounded px-2 py-1"
+            value={filterType}
+            onChange={(e) => setFilterType(e.target.value)}
+          >
+            <option value="all">Semua</option>
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
+            <option value="outgoing_transfer">Transfer Keluar</option>
+            <option value="incoming_transfer">Transfer Masuk</option>
+          </select>
+        </div>
+
+        {/* Filter Rekening */}
+        <div className="flex items-center gap-2">
+          <label className="font-medium">Rekening:</label>
+          <select
+            className="border rounded px-2 py-1"
+            value={selectedAccountId}
+            onChange={(e) => setSelectedAccountId(e.target.value)}
+          >
+            <option value="all">Semua</option>
+            {accounts.map((acc) => (
+              <option key={acc.id} value={String(acc.id)}>
+                {acc.account_number} - {acc.account_type}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Chart */}
@@ -99,7 +145,7 @@ export default function UserTransactions() {
                   stackId="a"
                   barSize={30}
                   radius={[4, 4, 0, 0]}
-                  animationDuration={0} // Matikan animasi agar bar muncul langsung
+                  animationDuration={0}
                 />
               ))}
             </BarChart>
@@ -107,7 +153,7 @@ export default function UserTransactions() {
         )}
       </div>
 
-      {/* Riwayat Transaksi (Log) */}
+      {/* Riwayat Transaksi */}
       <div className="bg-white p-4 rounded shadow">
         <h3 className="font-semibold mb-2">Log Transaksi</h3>
         {loading ? (
@@ -116,20 +162,28 @@ export default function UserTransactions() {
           <p className="text-gray-400">Belum ada transaksi.</p>
         ) : (
           <ul className="space-y-2 max-h-72 overflow-y-auto text-sm">
-            {filtered.map((tx) => (
-              <li key={tx.id} className="border-b pb-2">
-                <p className="font-semibold text-gray-800">
-                  {tx.transaction_description}
-                </p>
-                <p className="text-gray-600">
-                  {tx.transaction_type.toUpperCase()} - Rp
-                  {Number(tx.transaction_amount).toLocaleString("id-ID")}
-                </p>
-                <p className="text-xs text-gray-400">
-                  {new Date(tx.transaction_created_at).toLocaleString("id-ID")}
-                </p>
-              </li>
-            ))}
+            {[...filtered]
+              .sort(
+                (a, b) =>
+                  new Date(b.transaction_created_at) -
+                  new Date(a.transaction_created_at)
+              )
+              .map((tx) => (
+                <li key={tx.id} className="border-b pb-2">
+                  <p className="font-semibold text-gray-800">
+                    {tx.transaction_description}
+                  </p>
+                  <p className="text-gray-600">
+                    {tx.transaction_type.toUpperCase()} - Rp
+                    {Number(tx.transaction_amount).toLocaleString("id-ID")}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {new Date(tx.transaction_created_at).toLocaleString(
+                      "id-ID"
+                    )}
+                  </p>
+                </li>
+              ))}
           </ul>
         )}
       </div>

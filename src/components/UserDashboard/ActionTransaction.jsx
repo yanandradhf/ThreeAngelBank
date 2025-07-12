@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useTransaction } from "../../hooks/useTransaction";
+import { useEffect, useState, useRef } from "react";
 import { useAccount } from "../../hooks/useAccount";
+import { useTransaction } from "../../hooks/useTransaction";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function CreateTransaction() {
@@ -21,59 +21,104 @@ export default function CreateTransaction() {
   const { createTransaction } = useTransaction();
   const { getUserById } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      getAccountsByUserId(user.id).then(setAccounts);
-    }
-  }, [user]);
+  const debounceTimeout = useRef(null);
+  const lastCheckedRef = useRef("");
+  const receiverCache = useRef({});
 
-  const handleReceiverCheck = async () => {
-    try {
-      const acc = await getAccountByNumber(form.account_number_receiver);
-      if (!acc) {
-        setReceiverInfo(null);
-        setReceiverName("");
-        setError("No rekening tujuan tidak ditemukan.");
-      } else {
-        setReceiverInfo(acc);
-        const targetUser = await getUserById(acc.user_id);
-        setReceiverName(
-          targetUser.user_firstname + " " + targetUser.user_lastname
-        );
-        setError("");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Gagal mencari rekening.");
+  // Ambil akun user saat pertama render
+  useEffect(() => {
+    if (user?.id) {
+      getAccountsByUserId(user.id)
+        .then(setAccounts)
+        .catch((err) => {
+          console.error("❌ Gagal mengambil akun:", err);
+          setError("Gagal mengambil akun.");
+        });
     }
+  }, [user?.id]);
+
+  const handleReceiverCheck = () => {
+    const accountNumber = form.account_number_receiver.trim();
+    if (!accountNumber) return setError("Nomor rekening tujuan kosong.");
+
+    if (lastCheckedRef.current === accountNumber) {
+      console.log("⛔ Sudah dicek sebelumnya, lewati request.");
+      return;
+    }
+
+    // Cache hit
+    if (receiverCache.current[accountNumber]) {
+      const { acc, user } = receiverCache.current[accountNumber];
+      setReceiverInfo(acc);
+      setReceiverName(`${user.user_firstname} ${user.user_lastname}`);
+      setError("");
+      return;
+    }
+
+    lastCheckedRef.current = accountNumber;
+    setError("");
+
+    clearTimeout(debounceTimeout.current);
+    debounceTimeout.current = setTimeout(async () => {
+      try {
+        const acc = await getAccountByNumber(accountNumber);
+        if (!acc) {
+          setReceiverInfo(null);
+          setReceiverName("");
+          setError("❌ Nomor rekening tujuan tidak ditemukan.");
+        } else {
+          const user = await getUserById(String(acc.user_id));
+          setReceiverInfo(acc);
+          setReceiverName(`${user.user_firstname} ${user.user_lastname}`);
+          receiverCache.current[accountNumber] = { acc, user };
+          setError("");
+        }
+      } catch (err) {
+        console.error("❌ Gagal cek rekening tujuan:", err);
+        if (err.response?.status === 429) {
+          setError("🚫 Terlalu banyak permintaan. Coba lagi nanti.");
+        } else {
+          setError("❌ Terjadi kesalahan saat mencari rekening.");
+        }
+      }
+    }, 600);
   };
 
   const handleSubmit = async () => {
     setError("");
-    if (!form.account_id_sender || !form.transaction_amount) {
-      setError("Mohon lengkapi semua kolom.");
+
+    const {
+      transaction_type,
+      account_id_sender,
+      account_number_receiver,
+      transaction_amount,
+      transaction_description,
+    } = form;
+
+    if (!account_id_sender || !transaction_amount) {
+      setError("❗ Lengkapi semua kolom.");
       return;
     }
 
-    let receiverId = form.account_id_sender;
-    if (form.transaction_type === "transfer") {
-      if (!receiverInfo) {
-        setError("Rekening tujuan belum dicek atau tidak valid.");
-        return;
-      }
-      receiverId = receiverInfo.id;
+    if (transaction_type === "transfer" && !receiverInfo) {
+      setError("❗ Rekening tujuan belum dicek atau tidak valid.");
+      return;
     }
 
     try {
+      const senderId = Number(account_id_sender);
+      const receiverId =
+        transaction_type === "transfer" ? Number(receiverInfo.id) : senderId;
+
       await createTransaction({
-        transaction_type: form.transaction_type,
-        account_id_sender: Number(form.account_id_sender),
+        transaction_type,
+        account_id_sender: senderId,
         account_id_receiver: receiverId,
-        transaction_amount: Number(form.transaction_amount),
-        transaction_description: form.transaction_description,
+        transaction_amount: Number(transaction_amount),
+        transaction_description,
       });
 
-      alert("Transaksi berhasil!");
+      alert("✅ Transaksi berhasil!");
       setForm({
         transaction_type: "deposit",
         account_id_sender: "",
@@ -83,9 +128,14 @@ export default function CreateTransaction() {
       });
       setReceiverInfo(null);
       setReceiverName("");
+      lastCheckedRef.current = "";
     } catch (err) {
-      console.error(err);
-      setError("Transaksi gagal.");
+      console.error("❌ Gagal membuat transaksi:", err);
+      if (err.response?.status === 429) {
+        setError("🚫 Terlalu banyak permintaan. Coba lagi nanti.");
+      } else {
+        setError("❌ Transaksi gagal.");
+      }
     }
   };
 
@@ -95,6 +145,7 @@ export default function CreateTransaction() {
 
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
+      {/* Jenis Transaksi */}
       <div className="space-y-2">
         <label className="block font-medium">Jenis Transaksi</label>
         <select
@@ -110,6 +161,7 @@ export default function CreateTransaction() {
         </select>
       </div>
 
+      {/* Rekening Sumber */}
       <div className="space-y-2">
         <label className="block font-medium">Rekening Sumber</label>
         <select
@@ -128,9 +180,9 @@ export default function CreateTransaction() {
         </select>
 
         {form.account_id_sender && (
-          <div className="mt-1 text-sm text-gray-600">
+          <p className="text-sm text-gray-600 mt-1">
             Saldo:{" "}
-            <span className="font-semibold text-green-600">
+            <span className="text-green-600 font-semibold">
               Rp
               {(() => {
                 const selected = accounts.find(
@@ -141,10 +193,11 @@ export default function CreateTransaction() {
                   : 0;
               })()}
             </span>
-          </div>
+          </p>
         )}
       </div>
 
+      {/* No Rekening Tujuan */}
       {form.transaction_type === "transfer" && (
         <div className="space-y-2">
           <label className="block font-medium">No Rekening Tujuan</label>
@@ -154,10 +207,14 @@ export default function CreateTransaction() {
               className="flex-1 border p-2 rounded"
               value={form.account_number_receiver}
               onChange={(e) =>
-                setForm({ ...form, account_number_receiver: e.target.value })
+                setForm({
+                  ...form,
+                  account_number_receiver: e.target.value,
+                })
               }
             />
             <button
+              type="button"
               onClick={handleReceiverCheck}
               className="bg-blue-600 text-white px-3 py-1 rounded"
             >
@@ -166,13 +223,13 @@ export default function CreateTransaction() {
           </div>
           {receiverInfo && (
             <p className="text-sm text-green-600">
-              Rekening ditemukan ({receiverInfo.account_type}) milik{" "}
-              {receiverName} (ID: {receiverInfo.user_id})
+              ✅ {receiverInfo.account_type} a.n {receiverName}
             </p>
           )}
         </div>
       )}
 
+      {/* Jumlah */}
       <div className="space-y-2">
         <label className="block font-medium">Jumlah</label>
         <input
@@ -185,6 +242,7 @@ export default function CreateTransaction() {
         />
       </div>
 
+      {/* Deskripsi */}
       <div className="space-y-2">
         <label className="block font-medium">Deskripsi</label>
         <input

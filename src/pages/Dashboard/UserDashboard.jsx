@@ -1,18 +1,43 @@
 import { useNavigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
+  const { getUserById } = useAuth();
+
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // loading state
 
   useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem("user"));
-    if (!localUser) {
-      navigate("/login");
-    } else {
-      setUser(localUser);
-    }
-  }, [navigate]);
+    const fetchUser = async () => {
+      const localUser = JSON.parse(localStorage.getItem("user"));
+      if (!localUser || !localUser.id) {
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const fetchedUser = await getUserById(localUser.id);
+        setUser(fetchedUser);
+      } catch (error) {
+        console.error("Failed to fetch user", error);
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [navigate, getUserById]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-600">
+        Loading user info...
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-100">
