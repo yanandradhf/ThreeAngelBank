@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ user_email: "", user_password: "" });
   const { login, loading, error } = useAuth();
 
   const handleLogin = async () => {
     const user = await login(form);
+    console.log(user, "==> LOGINFORM");
+
     if (user) {
       alert("Login success");
       localStorage.setItem("user", JSON.stringify(user));
@@ -18,13 +20,15 @@ export default function LoginPage() {
   return (
     <div>
       <input
-        name="email"
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        name="user_email"
+        placeholder="Email"
+        onChange={(e) => setForm({ ...form, user_email: e.target.value })}
       />
       <input
-        name="password"
+        name="user_password"
+        placeholder="Password"
         type="password"
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        onChange={(e) => setForm({ ...form, user_password: e.target.value })}
       />
       <button onClick={handleLogin} disabled={loading}>
         Login
