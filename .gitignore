@@ -21,7 +21,7 @@ dist-ssr/
 .env.*.local
 
 # JSON Server database (opsional)
-db.json
+# db.json
 
 # System files
 .DS_Store
