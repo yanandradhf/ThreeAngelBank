@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
+
 export function Sidebar() {
+  const navigate = useNavigate();
   const navItems = [
-    { name: "Dashboard", link: "#dashboard" },
-    { name: "Transfer", link: "#accounts" },
-    { name: "Acivity", link: "#transactions" },
+    { name: "Dashboard", path: "/user/dashboard" },
+    { name: "Transfer", path: "/user/dashboard/transfer" },
+    { name: "Analytics", path: "/user/dashboard/analytics" },
   ];
   return (
     <aside
@@ -15,14 +18,14 @@ export function Sidebar() {
       </div>
       <nav className="space-y-2">
         {navItems.map((item) => (
-          <a
+          <button
             key={item.name}
             type="button"
             className="flex items-center w-full p-3 rounded-lg text-lg font-medium text-emerald-700 bg-[#ebebeb] hover:bg-[#b6b6b6] transition-colors duration-200 text-left"
-            onClick={() => (window.location.hash = item.link)}
+            onClick={() => navigate(item.path)}
           >
             {item.name}
-          </a>
+          </button>
         ))}
       </nav>
     </aside>

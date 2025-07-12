@@ -1,10 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 export function UserDashboardMenu(){
+    const navigate = useNavigate();
     return(
-        <main className="h-screen w-screen bg-gradient-to-br from-emerald-50 to-emerald-100">
-          <div className="max-w-5xl mx-auto">
+        <main className="h-[100%] w-screen pt-30 bg-gradient-to-br from-emerald-50 to-emerald-100 ps-50 flex items-center justify-center">
+          <div className="max-w-5xl mx-auto pb-30">
             {/* Button Tambah Rekening */}
             <div className="flex justify-end mb-4">
-              <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors duration-200 flex items-center gap-2">
+              <button
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors duration-200 flex items-center gap-2"
+                onClick={() => navigate("newaccount")}
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
                 Tambah Rekening
               </button>
