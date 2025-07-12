@@ -363,20 +363,6 @@
       "user_role": "user",
       "user_created_at": "2025-07-12T10:08:12.828Z",
       "user_update_at": "2025-07-12T10:08:12.828Z"
-    },
-    {
-      "id": 27,
-      "user_email": "havis@mail.com",
-      "user_password": "havis123",
-      "user_firstname": "havis",
-      "user_lastname": "kece",
-      "user_gender": "Male",
-      "user_birth": "1999-10-09",
-      "user_phone": "08123232324",
-      "user_city": "padang",
-      "user_role": "user",
-      "user_created_at": "2025-07-12T10:10:48.525Z",
-      "user_update_at": "2025-07-12T10:10:48.525Z"
     }
   ],
   "accounts": [
@@ -683,22 +669,22 @@
     {
       "id": 31,
       "user_id": 26,
-      "account_type": "payroll",
+      "account_type": "deposit",
       "account_number": "0010000031",
-      "account_balance": 434000,
+      "account_balance": 500000,
       "account_status": "active",
-      "account_created_at": "2025-07-12T10:08:12.844Z",
-      "account_updated_at": "2025-07-12T10:08:12.844Z"
+      "account_created_at": "2025-07-12T11:42:12.174Z",
+      "account_updated_at": "2025-07-12T11:42:12.174Z"
     },
     {
       "id": 32,
-      "user_id": 27,
-      "account_type": "deposit",
+      "user_id": 26,
+      "account_type": "payroll",
       "account_number": "0010000032",
-      "account_balance": 912000,
+      "account_balance": 100000,
       "account_status": "active",
-      "account_created_at": "2025-07-12T10:10:48.540Z",
-      "account_updated_at": "2025-07-12T10:10:48.540Z"
+      "account_created_at": "2025-07-12T11:43:40.086Z",
+      "account_updated_at": "2025-07-12T11:43:40.086Z"
     }
   ],
   "transactions": [
@@ -1058,7 +1044,7 @@
       "id": 33,
       "transaction_type": "incoming_transfer",
       "account_id_sender": 3,
-      "account_id_receiver": 5,
+      "account_id_receiver": 26,
       "transaction_amount": 400000,
       "transaction_description": "Transfer dari Siti Aminah",
       "transaction_status": "success",
@@ -1090,7 +1076,7 @@
     {
       "id": 36,
       "transaction_type": "outgoing_transfer",
-      "account_id_sender": 11,
+      "account_id_sender": 26,
       "account_id_receiver": 13,
       "transaction_amount": 500000,
       "transaction_description": "Transfer ke Dian Lestari",
@@ -1157,7 +1143,7 @@
       "id": 42,
       "transaction_type": "outgoing_transfer",
       "account_id_sender": 27,
-      "account_id_receiver": 29,
+      "account_id_receiver": 26,
       "transaction_amount": 250000,
       "transaction_description": "Transfer ke Vivi Lestari",
       "transaction_status": "success",
@@ -1168,7 +1154,7 @@
       "id": 43,
       "transaction_type": "deposit",
       "account_id_sender": 31,
-      "account_id_receiver": 31,
+      "account_id_receiver": 26,
       "transaction_amount": 150000,
       "transaction_description": "Setoran tunai",
       "transaction_status": "success",
@@ -1179,7 +1165,7 @@
       "id": 44,
       "transaction_type": "withdraw",
       "account_id_sender": 33,
-      "account_id_receiver": 33,
+      "account_id_receiver": 26,
       "transaction_amount": 50000,
       "transaction_description": "Penarikan kecil",
       "transaction_status": "success",
@@ -1288,7 +1274,7 @@
     {
       "id": 54,
       "transaction_type": "withdraw",
-      "account_id_sender": 57,
+      "account_id_sender": 26,
       "account_id_receiver": 57,
       "transaction_amount": 200000,
       "transaction_description": "Penarikan ATM",
@@ -1299,7 +1285,7 @@
     {
       "id": 55,
       "transaction_type": "deposit",
-      "account_id_sender": 59,
+      "account_id_sender": 26,
       "account_id_receiver": 59,
       "transaction_amount": 300000,
       "transaction_description": "Setoran tunai",
@@ -1310,7 +1296,7 @@
     {
       "id": 56,
       "transaction_type": "outgoing_transfer",
-      "account_id_sender": 61,
+      "account_id_sender": 26,
       "account_id_receiver": 63,
       "transaction_amount": 400000,
       "transaction_description": "Transfer ke Agus Firmansyah",
@@ -1321,7 +1307,7 @@
     {
       "id": 57,
       "transaction_type": "deposit",
-      "account_id_sender": 65,
+      "account_id_sender": 26,
       "account_id_receiver": 65,
       "transaction_amount": 500000,
       "transaction_description": "Setoran gaji",
@@ -1332,7 +1318,7 @@
     {
       "id": 58,
       "transaction_type": "withdraw",
-      "account_id_sender": 67,
+      "account_id_sender": 26,
       "account_id_receiver": 67,
       "transaction_amount": 150000,
       "transaction_description": "Penarikan tunai",
@@ -1343,7 +1329,7 @@
     {
       "id": 59,
       "transaction_type": "outgoing_transfer",
-      "account_id_sender": 69,
+      "account_id_sender": 26,
       "account_id_receiver": 1,
       "transaction_amount": 250000,
       "transaction_description": "Transfer ke Bima Sakti",

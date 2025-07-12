@@ -1,13 +1,14 @@
 import { useAuth } from "../../hooks/useAuth";
-import { useTransaction } from "../../hooks/useTransaction";
+
 import { useRegisterStore } from "../../stores/registerStore";
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useAccount } from "../../hooks/useAccount";
 export default function RegisterStep3() {
   const { form, prevStep } = useRegisterStore();
   const { register } = useAuth();
-  const { addAccount } = useTransaction();
+  const { addAccount } = useAccount();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
