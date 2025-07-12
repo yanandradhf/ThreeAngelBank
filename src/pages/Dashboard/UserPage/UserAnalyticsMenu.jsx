@@ -42,16 +42,19 @@ export function UserAnalyticsMenu(){
       },
     ];
     const chartData = {
-      labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli"],
+      labels: [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli",
+        "Agustus", "September", "Oktober", "November", "Desember"
+      ],
       datasets: [
         {
           label: "Pemasukan",
-          data: [2000000, 1500000, 1800000, 1700000, 1600000, 1900000, 2100000],
+          data: [2000000, 1500000, 1800000, 1700000, 1600000, 1900000, 2100000, 2200000, 2300000, 2000000, 2100000, 2200000],
           backgroundColor: "#10b981",
         },
         {
           label: "Pengeluaran",
-          data: [1200000, 1300000, 1100000, 1400000, 1500000, 1200000, 1300000],
+          data: [1200000, 1300000, 1100000, 1400000, 1500000, 1200000, 1300000, 1250000, 1350000, 1400000, 1200000, 1300000],
           backgroundColor: "#f87171",
         },
       ],
