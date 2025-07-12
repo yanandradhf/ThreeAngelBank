@@ -2,7 +2,7 @@ export function Sidebar() {
   const navItems = [
     { name: "Dashboard", link: "#dashboard" },
     { name: "Transfer", link: "#accounts" },
-    { name: "Transaction", link: "#transactions" },
+    { name: "Acivity", link: "#transactions" },
   ];
   return (
     <aside

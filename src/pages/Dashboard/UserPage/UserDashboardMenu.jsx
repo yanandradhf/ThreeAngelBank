@@ -1,6 +1,6 @@
 export function UserDashboardMenu(){
     return(
-        <main className="ml-0 lg:ml-64 pt-30 pb-10 px-6 h-full min-w-full bg-gradient-to-br from-emerald-50 to-emerald-100">
+        <main className="h-screen w-screen bg-gradient-to-br from-emerald-50 to-emerald-100">
           <div className="max-w-5xl mx-auto">
             {/* Button Tambah Rekening */}
             <div className="flex justify-end mb-4">
