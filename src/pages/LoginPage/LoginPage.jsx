@@ -1,21 +1,30 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ user_email: "", user_password: "" });
-  const { login, loading, error } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    const user = await login(form);
-    console.log(user, "==> LOGINFORM");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-      navigate("/dashboard");
-    } else {
-      alert("Invalid credentials");
+  const handleLogin = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const user = await login(form);
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,16 +51,23 @@ export default function LoginPage() {
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <input
             name="user_password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             className="w-full p-3 border rounded focus:outline-none focus:ring focus:ring-blue-300"
             onChange={(e) =>
               setForm({ ...form, user_password: e.target.value })
             }
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-600"
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
         </div>
 
         <button
@@ -63,9 +79,7 @@ export default function LoginPage() {
         </button>
 
         {error && (
-          <p className="text-red-600 text-sm mt-3 text-center">
-            {error.message}
-          </p>
+          <p className="text-red-600 text-sm mt-3 text-center">{error}</p>
         )}
 
         <button

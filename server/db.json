@@ -391,6 +391,34 @@
       "user_role": "user",
       "user_created_at": "2025-07-12T14:06:55.846Z",
       "user_update_at": "2025-07-12T14:06:55.846Z"
+    },
+    {
+      "id": 29,
+      "user_email": "hafa@gmail.com",
+      "user_password": "12345678",
+      "user_firstname": "hafa",
+      "user_lastname": "cakep",
+      "user_gender": "Male",
+      "user_birth": "2025-07-15",
+      "user_phone": "0982841",
+      "user_city": "padang",
+      "user_role": "user",
+      "user_created_at": "2025-07-12T16:41:23.563Z",
+      "user_update_at": "2025-07-12T16:41:23.564Z"
+    },
+    {
+      "id": 30,
+      "user_email": "citra@gmail.com",
+      "user_password": "87654321",
+      "user_firstname": "citra",
+      "user_lastname": "cakep",
+      "user_gender": "Female",
+      "user_birth": "2025-07-13",
+      "user_phone": "0939123",
+      "user_city": "siduarji",
+      "user_role": "user",
+      "user_created_at": "2025-07-12T17:20:41.875Z",
+      "user_update_at": "2025-07-12T17:20:41.875Z"
     }
   ],
   "accounts": [
@@ -685,44 +713,34 @@
       "account_updated_at": "2024-07-12T11:15:00Z"
     },
     {
-      "id": "30",
+      "id": 30,
       "user_id": 29,
+      "account_type": "saving",
       "account_number": "0010000030",
-      "account_type": "deposit",
-      "account_balance": 65000000,
+      "account_balance": 2000000,
       "account_status": "active",
-      "account_created_at": "2023-01-29T16:15:00Z",
-      "account_updated_at": "2024-07-12T11:20:00Z"
+      "account_created_at": "2025-07-12T16:41:23.602Z",
+      "account_updated_at": "2025-07-12T16:41:23.602Z"
     },
     {
-      "id": "31",
-      "user_id": 26,
+      "id": 31,
+      "user_id": 29,
       "account_type": "payroll",
       "account_number": "0010000031",
-      "account_balance": 434000,
+      "account_balance": 10000,
       "account_status": "active",
-      "account_created_at": "2025-07-12T10:08:12.844Z",
-      "account_updated_at": "2025-07-12T10:08:12.844Z"
+      "account_created_at": "2025-07-12T17:13:22.203Z",
+      "account_updated_at": "2025-07-12T17:13:22.204Z"
     },
     {
-      "id": "32",
-      "user_id": 27,
-      "account_type": "deposit",
-      "account_number": "0010000032",
-      "account_balance": 912000,
-      "account_status": "active",
-      "account_created_at": "2025-07-12T10:10:48.540Z",
-      "account_updated_at": "2025-07-12T10:10:48.540Z"
-    },
-    {
-      "id": 33,
-      "user_id": 28,
+      "id": 32,
+      "user_id": 30,
       "account_type": "saving",
-      "account_number": "0010000033",
+      "account_number": "0010000032",
       "account_balance": 0,
       "account_status": "active",
-      "account_created_at": "2025-07-12T14:06:55.939Z",
-      "account_updated_at": "2025-07-12T14:06:55.939Z"
+      "account_created_at": "2025-07-12T17:20:41.998Z",
+      "account_updated_at": "2025-07-12T17:20:41.998Z"
     }
   ],
   "transactions": [
@@ -1385,6 +1403,17 @@
       "transaction_status": "success",
       "transaction_created_at": "2024-07-13T18:00:00Z",
       "transaction_updated_at": "2024-07-13T18:00:00Z"
+    },
+    {
+      "id": "1448",
+      "transaction_type": "transfer",
+      "account_id_sender": 30,
+      "account_id_receiver": 11,
+      "transaction_amount": 1000000,
+      "transaction_description": "Bayar Makan",
+      "transaction_status": "success",
+      "transaction_created_at": "2025-07-12T17:17:50.898Z",
+      "transaction_updated_at": "2025-07-12T17:17:50.898Z"
     }
   ]
 }

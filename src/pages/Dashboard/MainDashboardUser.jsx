@@ -1,5 +1,6 @@
 import { useNavigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function MainDashboardUser() {
   const navigate = useNavigate();
@@ -20,13 +21,23 @@ export default function MainDashboardUser() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gradient-to-br from-sky-50 via-blue-100 to-indigo-100 overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md px-6 py-8">
-        <h1 className="text-2xl font-bold text-blue-600 mb-6">
-          Three Angels Bank
-        </h1>
-        <nav className="flex flex-col gap-4">
+      <motion.aside
+        initial={{ x: -300 }}
+        animate={{ x: 0 }}
+        transition={{ type: "spring", stiffness: 80 }}
+        className="w-64 bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-500 text-white shadow-xl px-6 py-8 flex flex-col backdrop-blur-xl bg-opacity-70 rounded-r-3xl"
+      >
+        <motion.h1
+          className="text-3xl font-extrabold text-white mb-8 text-center tracking-wide"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ repeat: Infinity, duration: 3 }}
+        >
+          Three Angels
+        </motion.h1>
+
+        <nav className="flex flex-col gap-6">
           <SidebarButton path="/dashboard" label="📊 Dashboard" />
           <SidebarButton
             path="/dashboard/transactions"
@@ -36,25 +47,37 @@ export default function MainDashboardUser() {
             path="/dashboard/actionTransaction"
             label="📈 Action"
           />
-          <button
-            onClick={handleLogout}
-            className="text-left text-red-500 font-medium hover:underline mt-4"
-          >
-            🚪 Logout
-          </button>
         </nav>
-      </aside>
+
+        <button
+          onClick={handleLogout}
+          className="mt-auto bg-red-400 hover:bg-red-500 text-white font-semibold py-2 rounded-xl transition"
+        >
+          🚪 Logout
+        </button>
+      </motion.aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Welcome, <span className="text-blue-600">{user?.user_firstname}</span>{" "}
-          👋
+      <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="flex-1 p-8 overflow-y-auto"
+      >
+        <h2 className="text-3xl font-bold text-slate-800 mb-6">
+          Welcome,{" "}
+          <span className="text-indigo-600">{user?.user_firstname}</span> 👋
         </h2>
-        <div className="bg-white rounded-xl shadow p-6 min-h-[calc(100vh-120px)]">
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="bg-white bg-opacity-70 backdrop-blur-xl rounded-3xl shadow-xl p-6 min-h-[calc(100vh-150px)] transition"
+        >
           <Outlet />
-        </div>
-      </main>
+        </motion.div>
+      </motion.main>
     </div>
   );
 }
@@ -62,11 +85,13 @@ export default function MainDashboardUser() {
 function SidebarButton({ path, label }) {
   const navigate = useNavigate();
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.06, x: 8 }}
+      transition={{ type: "spring", stiffness: 300 }}
       onClick={() => navigate(path)}
-      className="text-left text-gray-700 font-medium hover:text-blue-600 transition"
+      className="text-left font-medium text-lg text-white hover:text-yellow-300 transition"
     >
       {label}
-    </button>
+    </motion.button>
   );
 }
