@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/Register";
 import { Routes, Route } from "react-router-dom";
+import { DashboardPage } from "./pages/Dashboard/DashboardPage";
 //import './App.css'
 
 function App() {
@@ -11,9 +12,11 @@ function App() {
 
   return (
     <>
+      <DashboardPage/>
+      
       <Routes>
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/user/dashboard" element={<RegisterPage />} />
+        <Route path="/user/transfer" element={<LoginPage />} />
       </Routes>
     </>
   );
