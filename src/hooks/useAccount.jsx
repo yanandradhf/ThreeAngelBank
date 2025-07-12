@@ -29,5 +29,16 @@ export function useAccount() {
     return res.data;
   };
 
-  return { addAccount, getAccountsByUserId };
+  const getAccountByNumber = async (account_number) => {
+    const res = await axios.get(`${API_URL}/accounts`, {
+      params: { account_number },
+    });
+    return res.data.length > 0 ? res.data[0] : null;
+  };
+
+  return {
+    addAccount,
+    getAccountsByUserId,
+    getAccountByNumber,
+  };
 }

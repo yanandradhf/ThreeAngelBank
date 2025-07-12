@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-
 import { useTransaction } from "../../hooks/useTransaction";
 import { useAccount } from "../../hooks/useAccount";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function CreateTransaction() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -14,10 +14,12 @@ export default function CreateTransaction() {
     transaction_description: "",
   });
   const [receiverInfo, setReceiverInfo] = useState(null);
+  const [receiverName, setReceiverName] = useState("");
   const [error, setError] = useState("");
 
-  const { getAccountsByUserId } = useAccount();
+  const { getAccountsByUserId, getAccountByNumber } = useAccount();
   const { createTransaction } = useTransaction();
+  const { getUserById } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -27,18 +29,21 @@ export default function CreateTransaction() {
 
   const handleReceiverCheck = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:5001/accounts?account_number=${form.account_number_receiver}`
-      );
-      const data = await res.json();
-      if (data.length === 0) {
+      const acc = await getAccountByNumber(form.account_number_receiver);
+      if (!acc) {
         setReceiverInfo(null);
+        setReceiverName("");
         setError("No rekening tujuan tidak ditemukan.");
       } else {
-        setReceiverInfo(data[0]);
+        setReceiverInfo(acc);
+        const targetUser = await getUserById(acc.user_id);
+        setReceiverName(
+          targetUser.user_firstname + " " + targetUser.user_lastname
+        );
         setError("");
       }
     } catch (err) {
+      console.error(err);
       setError("Gagal mencari rekening.");
     }
   };
@@ -50,7 +55,7 @@ export default function CreateTransaction() {
       return;
     }
 
-    let receiverId = form.account_id_sender; // default (untuk deposit & withdraw)
+    let receiverId = form.account_id_sender;
     if (form.transaction_type === "transfer") {
       if (!receiverInfo) {
         setError("Rekening tujuan belum dicek atau tidak valid.");
@@ -62,9 +67,9 @@ export default function CreateTransaction() {
     try {
       await createTransaction({
         transaction_type: form.transaction_type,
-        account_id_sender: form.account_id_sender,
+        account_id_sender: Number(form.account_id_sender),
         account_id_receiver: receiverId,
-        transaction_amount: form.transaction_amount,
+        transaction_amount: Number(form.transaction_amount),
         transaction_description: form.transaction_description,
       });
 
@@ -77,6 +82,7 @@ export default function CreateTransaction() {
         transaction_description: "",
       });
       setReceiverInfo(null);
+      setReceiverName("");
     } catch (err) {
       console.error(err);
       setError("Transaksi gagal.");
@@ -120,14 +126,23 @@ export default function CreateTransaction() {
             </option>
           ))}
         </select>
-        <label className="block font-medium">Saldo Rekening</label>
-        <label className="block font-medium">
-          {accounts.map((acc) => (
-            <option key={acc.id} value={acc.id}>
-              {acc.account_number} - {acc.account_type}
-            </option>
-          ))}
-        </label>
+
+        {form.account_id_sender && (
+          <div className="mt-1 text-sm text-gray-600">
+            Saldo:{" "}
+            <span className="font-semibold text-green-600">
+              Rp
+              {(() => {
+                const selected = accounts.find(
+                  (acc) => String(acc.id) === String(form.account_id_sender)
+                );
+                return selected
+                  ? Number(selected.account_balance).toLocaleString()
+                  : 0;
+              })()}
+            </span>
+          </div>
+        )}
       </div>
 
       {form.transaction_type === "transfer" && (
@@ -151,8 +166,8 @@ export default function CreateTransaction() {
           </div>
           {receiverInfo && (
             <p className="text-sm text-green-600">
-              Rekening ditemukan ({receiverInfo.account_type}) milik user ID{" "}
-              {receiverInfo.user_id}
+              Rekening ditemukan ({receiverInfo.account_type}) milik{" "}
+              {receiverName} (ID: {receiverInfo.user_id})
             </p>
           )}
         </div>

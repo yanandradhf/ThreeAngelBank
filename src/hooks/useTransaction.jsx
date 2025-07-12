@@ -10,7 +10,6 @@ export function useTransaction() {
     });
     return res.data;
   };
-
   const createTransaction = async ({
     transaction_type,
     account_id_sender,
@@ -20,7 +19,17 @@ export function useTransaction() {
   }) => {
     const now = new Date().toISOString();
 
+    // 1. Ambil semua transaksi dulu
+    const txRes = await axios.get(`${API_URL}/transactions`);
+
+    // 2. Hitung ID terbesar yang bertipe number
+    const maxId = txRes.data.reduce((max, tx) => {
+      return typeof tx.id === "number" ? Math.max(max, tx.id) : max;
+    }, 0);
+
+    // 3. Buat transaksi baru
     const newTransaction = {
+      id: maxId + 1, // sama seperti register
       transaction_type,
       account_id_sender: Number(account_id_sender),
       account_id_receiver: Number(account_id_receiver),
@@ -31,9 +40,10 @@ export function useTransaction() {
       transaction_updated_at: now,
     };
 
+    // 4. Simpan transaksi
     const res = await axios.post(`${API_URL}/transactions`, newTransaction);
 
-    // update saldo rekening
+    // 5. Update saldo
     const senderRes = await axios.get(
       `${API_URL}/accounts/${account_id_sender}`
     );
@@ -45,10 +55,9 @@ export function useTransaction() {
     const sender = senderRes.data;
     const receiver = receiverRes.data;
 
-    // Update saldo
     if (transaction_type === "withdraw") {
       await axios.patch(`${API_URL}/accounts/${sender.id}`, {
-        account_balance: sender.account_balance - transaction_amount,
+        account_balance: sender.account_balance - Number(transaction_amount),
         account_updated_at: now,
       });
     } else if (transaction_type === "deposit") {

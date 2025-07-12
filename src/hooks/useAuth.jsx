@@ -22,6 +22,10 @@ export function useAuth() {
     });
     return res.data.length > 0 ? res.data[0] : null;
   };
+  const getUserById = async (userId) => {
+    const res = await axios.get(`${API_URL}/users/${userId}`);
+    return res.data;
+  };
 
-  return { register, login };
+  return { register, login, getUserById };
 }
