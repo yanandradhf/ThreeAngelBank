@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@layer utilities {
+  @keyframes slowbounce {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+  }
+
+  .animate-slowbounce {
+    animation: slowbounce 8s ease-in-out infinite;
+  }
+}
+
 /* Reset dasar + optimalisasi font rendering */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
