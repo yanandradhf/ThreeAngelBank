@@ -20,6 +20,7 @@ export default function LoginPage() {
   return (
     <div>
       <input
+        className="font-sans text-sm font-medium leading-[21px] text-gray-900"
         name="user_email"
         placeholder="Email"
         onChange={(e) => setForm({ ...form, user_email: e.target.value })}
