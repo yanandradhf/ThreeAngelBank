@@ -6,7 +6,7 @@
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import { HiEye, HiEyeOff } from "react-icons/hi"
-import LoginOption from "../../components/LoginOption"
+// import LoginOption from "../../components/LoginOption"
 
 const FormInput = () => {
   const [password, setPassword] = useState("")
