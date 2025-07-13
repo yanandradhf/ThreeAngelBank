@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   LayoutDashboard,
-  ArrowRightLeft,
-  BarChart2,
   LogOut,
   Menu,
   X,
   Users,
+  ArrowLeftCircle,
+  ArrowRightCircle,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -35,7 +35,7 @@ export function SidebarAdmin() {
 
   return (
     <>
-      {/* Tombol Toggle Sidebar */}
+      {/* Tombol Toggle Sidebar di luar */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 p-2 bg-emerald-600 text-white rounded-lg shadow-lg hover:bg-emerald-700 transition"
@@ -54,17 +54,18 @@ export function SidebarAdmin() {
             className="fixed top-0 left-0 h-full bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-500 text-white w-64 p-6 shadow-2xl z-40"
             style={{ paddingTop: "4rem" }}
           >
+            {/* Tombol Hide Sidebar di dalam */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-white hover:text-emerald-200 transition"
+            >
+              <ArrowLeftCircle size={24} />
+            </button>
+
             <motion.h2
               className="text-3xl font-extrabold text-center tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-lime-300 via-white to-emerald-100 drop-shadow-lg mb-10"
-              animate={{
-                scale: [1, 1.05, 1],
-                opacity: [0.9, 1, 0.9],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 4,
-                ease: "easeInOut",
-              }}
+              animate={{ scale: [1, 1.05, 1], opacity: [0.9, 1, 0.9] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
             >
               Three Angels
             </motion.h2>
