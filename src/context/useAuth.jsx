@@ -8,6 +8,15 @@ export function useAuth() {
     return res.data;
   };
 
+  const getAllUsers = async () => {
+  const res = await axios.get(`${API_URL}/users`);
+  return res.data;
+  };
+
+  const deleteUser = async (id) => {
+      await axios.delete(`${API_URL}/users/${id}`);
+    };
+
   // ✅ REGISTER USER
   const register = async (formData) => {
     try {
@@ -76,5 +85,5 @@ export function useAuth() {
     localStorage.removeItem("user");
   };
 
-  return { register, login, logout, getUserById };
+  return { register, login, logout, getUserById, getAllUsers, deleteUser };
 }

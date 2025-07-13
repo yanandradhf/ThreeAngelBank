@@ -17,6 +17,10 @@ import { UserAnalyticsMenu } from "./pages/Dashboard/UserPage/UserAnalyticsMenu"
 import { UserDetailMenu } from "./pages/Dashboard/UserPage/UserDetailMenu";
 //import './App.css'
 
+import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
+import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMenu";
+import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -32,6 +36,12 @@ function App() {
           <Route path="transfer" element={<UserTransferMenu />} />
           <Route path="analytics" element={<UserAnalyticsMenu />} />
           <Route path="detail" element={<UserDetailMenu />} />
+        </Route>
+
+        {/* Admin */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />}>
+          <Route index element={<AdminDashboardMenu />} />
+          <Route path="user" element={<AdminUserManagement />} />
         </Route>
       </Routes>
     </>
