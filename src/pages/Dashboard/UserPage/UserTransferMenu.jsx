@@ -104,7 +104,7 @@ export function UserTransferMenu() {
         account_id_receiver:
           form.transactionType === "transfer"
             ? String(destinationInfo?.id)
-            : String(source.id), // fallback untuk withdraw
+            : String(source.id),
         transaction_amount: amount,
         transaction_description: form.description,
       });
@@ -131,22 +131,18 @@ export function UserTransferMenu() {
     <main className="ps-50 flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-full max-w-lg flex flex-col mt-40 mb-40 gap-6 mx-4"
+        className="bg-white rounded-3xl shadow-2xl border border-emerald-100 p-10 w-full max-w-lg flex flex-col mt-32 mb-32 gap-6 mx-4"
       >
-        <h2 className="text-2xl font-bold text-emerald-700 mb-2 text-center">
-          Transfer Dana
+        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-400 bg-clip-text text-transparent text-center mb-6 tracking-wide">
+          💸 Transfer Dana
         </h2>
 
         {/* Jenis Transaksi */}
         <div>
-          <label
-            htmlFor="transactionType"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label className="block text-sm font-medium text-gray-600 mb-2">
             Jenis Transaksi
           </label>
           <select
-            id="transactionType"
             name="transactionType"
             value={form.transactionType}
             onChange={handleChange}
@@ -158,16 +154,12 @@ export function UserTransferMenu() {
           </select>
         </div>
 
-        {/* Rekening Sumber Dana */}
+        {/* Rekening Sumber */}
         <div>
-          <label
-            htmlFor="sourceAccount"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Rekening Sumber Dana
+          <label className="block text-sm font-medium text-gray-600 mb-2">
+            Rekening Sumber
           </label>
           <select
-            id="sourceAccount"
             name="sourceAccount"
             value={form.sourceAccount}
             onChange={handleChange}
@@ -187,21 +179,17 @@ export function UserTransferMenu() {
         {/* Rekening Tujuan */}
         {form.transactionType === "transfer" && (
           <div>
-            <label
-              htmlFor="destinationAccount"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
+            <label className="block text-sm font-medium text-gray-600 mb-2">
               Rekening Tujuan
             </label>
             <div className="flex gap-2">
               <input
                 type="text"
-                id="destinationAccount"
                 name="destinationAccount"
                 value={form.destinationAccount}
                 onChange={handleChange}
                 className="flex-1 px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
-                placeholder="Masukkan nomor rekening tujuan"
+                placeholder="Masukkan nomor rekening"
                 required
               />
               <button
@@ -214,7 +202,7 @@ export function UserTransferMenu() {
             </div>
             {destinationInfo && (
               <p className="text-sm text-green-600 mt-2">
-                Rekening ditemukan: <strong>{destinationInfo.name}</strong> (
+                Ditemukan: <strong>{destinationInfo.name}</strong> (
                 {destinationInfo.type})
               </p>
             )}
@@ -224,22 +212,18 @@ export function UserTransferMenu() {
           </div>
         )}
 
-        {/* Jumlah Transfer */}
+        {/* Jumlah */}
         <div>
-          <label
-            htmlFor="amount"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Jumlah Transfer
+          <label className="block text-sm font-medium text-gray-600 mb-2">
+            Jumlah
           </label>
           <input
             type="number"
-            id="amount"
             name="amount"
             value={form.amount}
             onChange={handleChange}
             className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
-            placeholder="Masukkan jumlah transfer"
+            placeholder="Masukkan jumlah"
             required
             min="1"
           />
@@ -247,14 +231,10 @@ export function UserTransferMenu() {
 
         {/* Deskripsi */}
         <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
+          <label className="block text-sm font-medium text-gray-600 mb-2">
             Deskripsi
           </label>
           <textarea
-            id="description"
             name="description"
             value={form.description}
             onChange={handleChange}
@@ -264,13 +244,13 @@ export function UserTransferMenu() {
           />
         </div>
 
-        {/* Button Submit */}
+        {/* Button */}
         <button
           type="submit"
           disabled={loading}
           className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md"
         >
-          {loading ? "Memproses..." : "Kirim"}
+          {loading ? "Memproses..." : "Kirim Dana"}
         </button>
       </form>
     </main>

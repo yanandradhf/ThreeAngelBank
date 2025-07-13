@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { motion } from "framer-motion";
 
-export function Navbar() {
+export function NavbarAdmin() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState("");
 
@@ -32,14 +32,14 @@ export function Navbar() {
       <div className="flex items-center gap-4">
         {/* User Name */}
         <span className="text-sm font-medium hidden md:block">
-          Halo, {userName || "Pengguna"}!
+          Halo, {userName || "Pengguna"}! (Admin)
         </span>
 
         {/* Avatar */}
         <motion.div
           whileHover={{ scale: 1.05 }}
           className="w-10 h-10 bg-emerald-300 rounded-full flex items-center justify-center text-xl font-bold border-2 border-white shadow-lg overflow-hidden cursor-pointer"
-          onClick={() => navigate("/user/dashboard/detail")}
+          onClick={() => navigate("/admin/dashboard/detail")}
           title="Lihat Profil"
         >
           <img

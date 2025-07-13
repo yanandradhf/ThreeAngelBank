@@ -4,7 +4,7 @@ import { useAccount } from "../../../context/useAccount";
 
 export function UserNewAccountMenu() {
   const navigate = useNavigate();
-  const { addAccount } = useAccount(); // pakai addAccount kamu
+  const { addAccount } = useAccount();
   const [form, setForm] = useState({
     account_type: "saving",
     account_balance: 300000,
@@ -32,7 +32,7 @@ export function UserNewAccountMenu() {
         account_type: form.account_type,
         account_balance: form.account_balance,
       });
-      alert("Rekening berhasil ditambahkan!");
+      alert("✅ Rekening berhasil ditambahkan!");
       navigate("/user/dashboard");
     } catch (err) {
       console.error("❌ Gagal menambahkan rekening:", err);
@@ -43,13 +43,13 @@ export function UserNewAccountMenu() {
   };
 
   return (
-    <main className="ps-50 flex items-center justify-center">
+    <main className="ps-50 flex items-center justify-center min-h-screen bg-gray-50">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-full max-w-lg flex flex-col mt-40 mb-40 gap-6 mx-4"
+        className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-full max-w-lg flex flex-col gap-6 mx-4 mt-24 mb-24"
       >
-        <h2 className="text-2xl font-bold text-emerald-700 mb-2 text-center">
-          Tambah Rekening Baru
+        <h2 className="text-3xl font-extrabold text-emerald-700 mb-6 text-center">
+          📄 Buat Rekening Baru
         </h2>
 
         {/* Tipe Rekening */}
@@ -58,7 +58,7 @@ export function UserNewAccountMenu() {
             htmlFor="account_type"
             className="block text-sm font-medium text-gray-700 mb-2"
           >
-            Tipe Rekening
+            Pilih Tipe Rekening
           </label>
           <select
             id="account_type"
@@ -74,11 +74,34 @@ export function UserNewAccountMenu() {
           </select>
         </div>
 
-        {/* Submit Button */}
+        {/* Saldo Awal */}
+        <div>
+          <label
+            htmlFor="account_balance"
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Saldo Awal
+          </label>
+          <input
+            type="number"
+            id="account_balance"
+            name="account_balance"
+            value={form.account_balance}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            min={50000}
+            required
+          />
+          <small className="text-gray-400 text-xs mt-1">
+            Minimal saldo awal Rp 50.000
+          </small>
+        </div>
+
+        {/* Tombol Submit */}
         <button
           type="submit"
-          className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md"
           disabled={loading}
+          className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:to-emerald-700 text-white font-semibold rounded-lg transition-colors shadow-lg"
         >
           {loading ? "Menyimpan..." : "Tambah Rekening"}
         </button>

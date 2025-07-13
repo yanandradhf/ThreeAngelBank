@@ -1,20 +1,35 @@
 import { useNavigate } from "react-router-dom";
 import { useRegisterStore } from "../../stores/registerStore";
 import { useState } from "react";
+import axios from "axios";
+const API_URL = "https://687288d776a5723aacd50eeb.mockapi.io/ThreeAngelsBank";
 
 export function RegisterStep1() {
   const { form, updateForm, nextStep } = useRegisterStore();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  console.log(form);
 
   // Validasi ketika klik Next
-  const handleNext = () => {
+  const handleNext = async () => {
     const newErrors = {};
 
     if (!form.user_email) {
       newErrors.user_email = "Email wajib diisi.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.user_email)) {
       newErrors.user_email = "Format email tidak valid.";
+    } else {
+      try {
+        const res = await axios.get(`${API_URL}/users`);
+        const existing = res.data.find(
+          (u) => u.user_email.toLowerCase() === form.user_email.toLowerCase()
+        );
+        if (existing) {
+          newErrors.user_email = "Email sudah terdaftar.";
+        }
+      } catch (err) {
+        newErrors.user_email = "Gagal cek email. Coba lagi.";
+      }
     }
 
     if (!form.user_firstname)
@@ -106,7 +121,7 @@ export function RegisterStep1() {
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+          className="flex-1 bg-green-600 text-white py-3 rounded hover:bg-green-700 transition disabled:opacity-50"
         >
           Next
         </button>

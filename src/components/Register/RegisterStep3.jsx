@@ -47,9 +47,58 @@ export function RegisterStep3() {
     <div className="space-y-6">
       <h3 className="text-xl font-semibold text-gray-800">Summary</h3>
 
-      <pre className="bg-gray-100 border border-gray-300 p-4 rounded text-sm max-h-72 overflow-auto">
-        {JSON.stringify(form, null, 2)}
-      </pre>
+      <div className="bg-gray-100 border border-gray-300 p-4 rounded text-sm max-h-72 overflow-auto space-y-2">
+          {/* Email */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Email</div>   
+          <div className="text-gray-900">{form.user_email || "-"}</div> 
+        </div>
+          {/* Password */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Password</div>   
+          <div className="text-gray-900">{form.user_password || "-"}</div> 
+        </div>
+          {/* First Name */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">First Name</div>   
+          <div className="text-gray-900">{form.user_firstname || "-"}</div> 
+        </div>
+          {/* Last Name */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Last Name</div>   
+          <div className="text-gray-900">{form.user_lastname || "-"}</div> 
+        </div>
+          {/* Gender */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Gender</div>   
+          <div className="text-gray-900">{form.user_gender || "-"}</div> 
+        </div>
+          {/* Tanggal Lahir */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Tanggal Lahir</div> 
+            <div className="text-gray-900">{form.user_birth || "-"}</div> 
+        </div>
+          {/* Nomor Telepon */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Nomor Telepon</div> 
+            <div className="text-gray-900">{form.user_phone || "-"}</div> 
+        </div>
+          {/* Kota */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Kota</div>   
+          <div className="text-gray-900">{form.user_city || "-"}</div> 
+        </div>
+          {/* Tipe Akun */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Tipe Akun</div>   
+          <div className="text-gray-900">{form.account_type || "-"}</div> 
+        </div>
+          {/* Saldo Akun */} 
+        <div className="grid grid-cols-2 gap-x-4">
+              <div className="font-semibold text-gray-700">Saldo Awal</div>   
+          <div className="text-gray-900">{form.account_balance || "-"}</div> 
+        </div>
+      </div>
 
       <div className="flex gap-4">
         <button

@@ -7,28 +7,24 @@ import {
   LogOut,
   Menu,
   X,
+  Users,
 } from "lucide-react";
 import { useState } from "react";
 
-export function Sidebar() {
+export function SidebarAdmin() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
 
   const navItems = [
     {
       name: "Dashboard",
-      path: "/user/dashboard",
+      path: "/admin/dashboard",
       icon: <LayoutDashboard size={18} />,
     },
     {
-      name: "Transfer",
-      path: "/user/dashboard/transfer",
-      icon: <ArrowRightLeft size={18} />,
-    },
-    {
-      name: "Analytics",
-      path: "/user/dashboard/analytics",
-      icon: <BarChart2 size={18} />,
+      name: "Nasabah",
+      path: "/admin/dashboard/nasabah",
+      icon: <Users size={18} />,
     },
   ];
 

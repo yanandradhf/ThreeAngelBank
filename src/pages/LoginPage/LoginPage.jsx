@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/useAuth";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function LoginPage() {
   const [form, setForm] = useState({ user_email: "", user_password: "" });
@@ -12,6 +13,18 @@ export function LoginPage() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // 👉 Cek user di localStorage, kalau ada langsung redirect ke dashboard sesuai role
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      if (user.user_role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
+    }
+  }, [navigate]);
+
   const handleLogin = async () => {
     setLoading(true);
     setError("");
@@ -19,7 +32,12 @@ export function LoginPage() {
       const user = await login(form);
       if (user) {
         localStorage.setItem("user", JSON.stringify(user));
-        navigate("/user/dashboard");
+        // Redirect ke dashboard sesuai role
+        if (user.user_role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard");
+        }
       }
     } catch (err) {
       setError(err.message);
@@ -29,24 +47,29 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-cyan-500 to-blue-600 overflow-hidden">
+    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-green-200 via-green-400 to-emerald-500 overflow-hidden">
       {/* Animated Background Circles */}
-      <div className="absolute top-0 left-0 w-full h-full">
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
         <div className="absolute w-72 h-72 bg-white bg-opacity-10 rounded-full -top-10 -left-10 animate-pulse"></div>
         <div className="absolute w-96 h-96 bg-white bg-opacity-5 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-slowbounce"></div>
         <div className="absolute w-64 h-64 bg-white bg-opacity-10 rounded-full bottom-0 right-0 animate-pulse"></div>
       </div>
 
-      <div className="relative z-10 w-full max-w-sm p-8 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center text-blue-900">
-          Login
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        className="relative z-10 w-full max-w-sm p-8 bg-white bg-opacity-80 backdrop-blur-xl rounded-3xl shadow-2xl"
+      >
+        <h2 className="text-3xl font-extrabold mb-8 text-center text-emerald-800 tracking-wide">
+          Welcome Back 🌿
         </h2>
 
         <div className="mb-4">
           <input
             name="user_email"
             placeholder="Email"
-            className="w-full p-3 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-emerald-300"
             onChange={(e) => setForm({ ...form, user_email: e.target.value })}
           />
         </div>
@@ -56,7 +79,7 @@ export function LoginPage() {
             name="user_password"
             type={showPassword ? "text" : "password"}
             placeholder="Password"
-            className="w-full p-3 border rounded focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring focus:ring-emerald-300"
             onChange={(e) =>
               setForm({ ...form, user_password: e.target.value })
             }
@@ -73,7 +96,7 @@ export function LoginPage() {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+          className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition font-semibold"
         >
           {loading ? "Loading..." : "Login"}
         </button>
@@ -84,11 +107,11 @@ export function LoginPage() {
 
         <button
           onClick={() => navigate("/register")}
-          className="w-full mt-4 bg-gray-100 text-blue-600 py-3 rounded hover:bg-gray-200 transition border border-gray-300"
+          className="w-full mt-4 bg-green-100 text-emerald-700 py-3 rounded-lg hover:bg-green-200 transition border border-green-300 font-semibold"
         >
           Register
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }

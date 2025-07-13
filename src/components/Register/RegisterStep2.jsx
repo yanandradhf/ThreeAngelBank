@@ -139,7 +139,7 @@ export function RegisterStep2() {
         </button>
         <button
           onClick={handleNext}
-          className="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+          className="flex-1 bg-green-600 text-white py-3 rounded hover:bg-green-700 transition disabled:opacity-50"
         >
           Next
         </button>
