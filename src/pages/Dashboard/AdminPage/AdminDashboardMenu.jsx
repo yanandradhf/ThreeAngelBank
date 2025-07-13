@@ -1,182 +1,107 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import axios from "axios";
+import { useAuth } from "../../../context/useAuth";
+import { useAccount } from "../../../context/useAccount";
+import { useTransaction } from "../../../context/useTransaction";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 
-const API_JSON_SERVER = "http://localhost:5001"; // transaksi
-const API_MOCKAPI =
-  "https://687288d776a5723aacd50eeb.mockapi.io/ThreeAngelsBank"; // rekening & nasabah
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement
+);
 
 export function AdminDashboardMenu() {
-  const [nasabahCount, setNasabahCount] = useState(0);
-  const [rekeningCount, setRekeningCount] = useState(0);
-  const [transaksiCount, setTransaksiCount] = useState(0);
-  const [totalDana, setTotalDana] = useState(0);
-  const [rekeningByType, setRekeningByType] = useState({});
-  const [savingCount, setSavingCount] = useState(0);
-  const [payrollCount, setPayrollCount] = useState(0);
-  const [depositCount, setDepositCount] = useState(0);
-  const [activeCount, setActiveCount] = useState(0);
-  const [dormantCount, setDormantCount] = useState(0);
-  const [suspendCount, setSuspendCount] = useState(0);
+  const navigate = useNavigate();
+  const { getAllUsers} = useAuth();
+  const { getAllTransactions } = useTransaction();
+
+  const [userCount, setUserCount] = useState(0);
+  const [transactionCount, setTransactionCount] = useState(0);
+  const [chartData, setChartData] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const users = await getAllUsers();
+        const transactions = await getAllTransactions();
+
+        setUserCount(users.length);
+        setTransactionCount(transactions.length);
+
+        // Hitung transaksi per user
+        const userTransactionCounts = {};
+        transactions.forEach((tx) => {
+          const userId = tx.transaction_user_id;
+          userTransactionCounts[userId] = (userTransactionCounts[userId] || 0) + 1;
+        });
+
+        const labels = Object.keys(userTransactionCounts).map((id) => `User ${id}`);
+        const data = Object.values(userTransactionCounts);
+
+        setChartData({
+          labels,
+          datasets: [
+            {
+              label: "Jumlah Transaksi per User",
+              data,
+              backgroundColor: "rgba(16, 185, 129, 0.7)", // emerald
+              borderRadius: 6,
+            },
+          ],
+        });
+      } catch (err) {
+        console.error("❌ Error loading admin dashboard:", err);
+      }
+    };
+
     fetchData();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const [nasabahRes, rekeningRes, transaksiRes] = await Promise.all([
-        axios.get(`${API_MOCKAPI}/users`),
-        axios.get(`${API_MOCKAPI}/accounts`),
-        axios.get(`${API_JSON_SERVER}/transactions`),
-      ]);
-
-      // Jumlah data
-      setNasabahCount(nasabahRes.data.length);
-      setRekeningCount(rekeningRes.data.length);
-      setTransaksiCount(transaksiRes.data.length);
-
-      // Total dana
-      const total = rekeningRes.data.reduce(
-        (acc, item) => acc + Number(item.account_balance || 0),
-        0
-      );
-      setTotalDana(total);
-
-      // Rekening berdasarkan type
-      const typeCounts = rekeningRes.data.reduce((acc, item) => {
-        const type = item.account_type || "lainnya";
-        acc[type] = (acc[type] || 0) + 1;
-        return acc;
-      }, {});
-      setRekeningByType(typeCounts);
-
-      // Hitung jumlah rekening spesifik
-      const saving = rekeningRes.data.filter(item => 
-        item.account_type?.toLowerCase() === 'saving' || 
-        item.account_type?.toLowerCase() === 'tabungan'
-      ).length;
-      const payroll = rekeningRes.data.filter(item => 
-        item.account_type?.toLowerCase() === 'payroll' || 
-        item.account_type?.toLowerCase() === 'gaji'
-      ).length;
-      const deposit = rekeningRes.data.filter(item => 
-        item.account_type?.toLowerCase() === 'deposit' || 
-        item.account_type?.toLowerCase() === 'deposito'
-      ).length;
-
-      setSavingCount(saving);
-      setPayrollCount(payroll);
-      setDepositCount(deposit);
-
-      // Hitung jumlah rekening berdasarkan status
-      const active = rekeningRes.data.filter(item => 
-        item.account_status?.toLowerCase() === 'active' || 
-        item.account_status?.toLowerCase() === 'aktif'
-      ).length;
-      const dormant = rekeningRes.data.filter(item => 
-        item.account_status?.toLowerCase() === 'dormant' || 
-        item.account_status?.toLowerCase() === 'tidak aktif'
-      ).length;
-      const suspend = rekeningRes.data.filter(item => 
-        item.account_status?.toLowerCase() === 'suspend' || 
-        item.account_status?.toLowerCase() === 'suspended' ||
-        item.account_status?.toLowerCase() === 'ditangguhkan'
-      ).length;
-
-      setActiveCount(active);
-      setDormantCount(dormant);
-      setSuspendCount(suspend);
-    } catch (error) {
-      console.error("❌ Error fetching admin dashboard data:", error);
-    }
-  };
-
   return (
-    <main className="pt-7 flex items-center justify-center">
-      <div className="max-w-6xl mx-auto pb-24 w-full px-4">
-        {/* Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl font-bold text-emerald-700 mb-10"
-        >
-          Admin Dashboard
-        </motion.h1>        {/* Summary Cards */}
-        <div className="flex justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 w-full">
-            <Card title="Jumlah Nasabah" value={nasabahCount} icon="👥" />
-            <Card title="Jumlah Rekening" value={rekeningCount} icon="💳" />
-            <Card title="Jumlah Transaksi" value={transaksiCount} icon="🔄" />
+    <main className="pt-30 ps-50 flex items-center justify-center">
+      <div className="max-w-5xl mx-auto pb-30">
+
+        {/* Ringkasan Stat */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-emerald-100">
+            <span className="text-sm text-gray-500 mb-2">Total User</span>
+            <span className="text-3xl font-bold text-emerald-700 mb-2">
+              {userCount}
+            </span>
+          </div>
+          <div className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-emerald-100">
+            <span className="text-sm text-gray-500 mb-2">Total Transaksi</span>
+            <span className="text-3xl font-bold text-emerald-700 mb-2">
+              {transactionCount}
+            </span>
           </div>
         </div>
 
-        {/* Total Dana Card - Full Width */}
-        <div className="flex justify-center mb-10">
-          <div className="w-full">
-            <Card 
-              title="Total Dana Nasabah" 
-              value={`Rp ${totalDana.toLocaleString('id-ID')}`} 
-              icon="💰" 
-              isFullWidth={true}
-            />
-          </div>
+        {/* Grafik Transaksi */}
+        <div className="bg-white rounded-xl shadow-lg p-6 border border-emerald-100">
+          <h2 className="text-xl font-semibold text-emerald-700 mb-4">
+            Grafik Jumlah Transaksi per User
+          </h2>
+          {chartData ? (
+            <Bar data={chartData} options={{ responsive: true, plugins: { legend: { display: false }}}} />
+          ) : (
+            <p className="text-gray-400 text-center">Loading grafik...</p>
+          )}
         </div>
-
-        <Section>
-          <div className="flex justify-center mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-              <Card title="Rekening Saving" value={savingCount} icon="💳" />
-              <Card title="Rekening Payroll" value={payrollCount} icon="💼" />
-              <Card title="Rekening Deposit" value={depositCount} icon="🏦" />
-            </div>
-          </div>
-        </Section>
-
-        <Section>
-          <div className="flex justify-center mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-              <Card title="Rekening Active" value={activeCount} icon="✅" />
-              <Card title="Rekening Dormant" value={dormantCount} icon="😴" />
-              <Card title="Rekening Suspend" value={suspendCount} icon="🚫" />
-            </div>
-          </div>
-        </Section>
-
-        
       </div>
     </main>
-  );
-}
-
-// Card Component
-function Card({ title, value, icon, isFullWidth = false }) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      className={`bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 text-center flex flex-col items-center ${
-        isFullWidth ? 'py-8' : ''
-      }`}
-    >
-      <div className={`mb-2 ${isFullWidth ? 'text-4xl' : 'text-3xl'}`}>{icon}</div>
-      <h2 className={`text-gray-500 mb-1 ${isFullWidth ? 'text-lg' : 'text-md'}`}>{title}</h2>
-      <span className={`font-bold text-emerald-700 ${isFullWidth ? 'text-3xl' : 'text-2xl'}`}>{value}</span>
-    </motion.div>
-  );
-}
-
-// Section Component
-function Section({ title, children }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 mb-10"
-    >
-      <h2 className="text-2xl font-bold text-emerald-700 mb-6">{title}</h2>
-      {children}
-    </motion.div>
   );
 }

@@ -19,6 +19,10 @@ import { AdminDetailMenu } from "./pages/Dashboard/AdminPage/AdminDetailMenu";
 import UnauthorizedPage, { ProtectedRoute } from "./Routes/ProtectedRoute";
 import PublicOnlyRoute from "./Routes/PublicOnlyRoute";
 
+import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
+import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMenu";
+import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
+
 function App() {
   return (
     <>
