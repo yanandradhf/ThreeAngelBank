@@ -1,8 +1,4 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import LoginPage from "./pages/LoginPage/LoginPage";
-// import RegisterPage from "./pages/RegisterPage2/Register";
 import { Routes, Route } from "react-router-dom";
 
 // import MainDashboardUser from "./pages/Dashboard/MainDashboardUser";
@@ -11,9 +7,12 @@ import { Routes, Route } from "react-router-dom";
 // import CreateTransaction from "./components/UserDashboard/ActionTransaction";
 
 import { DashboardPage } from "./pages/Dashboard/DashboardPage";
+
+import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { UserNewAccountMenu } from "./pages/Dashboard/UserPage/UserNewAccountMenu";
-import { UserTransferMenu } from "./pages/Dashboard/UserPage/UserTransferMenu";
 import { UserDashboardMenu } from "./pages/Dashboard/UserPage/UserDashboardMenu";
+import { UserTransferMenu } from "./pages/Dashboard/UserPage/UserTransferMenu";
+import { RegisterPage } from "./pages/RegisterPage";
 import { UserAnalyticsMenu } from "./pages/Dashboard/UserPage/UserAnalyticsMenu";
 import { UserDetailMenu } from "./pages/Dashboard/UserPage/UserDetailMenu";
 //import './App.css'

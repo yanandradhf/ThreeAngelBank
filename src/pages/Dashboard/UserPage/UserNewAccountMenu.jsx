@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from "../../../hooks/useAccount";
+import { useAccount } from "../../../context/useAccount";
 
 export function UserNewAccountMenu() {
   const navigate = useNavigate();

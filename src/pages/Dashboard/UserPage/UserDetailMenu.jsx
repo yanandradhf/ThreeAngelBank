@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../context/useAuth";
 
 export function UserDetailMenu() {
   const [userData, setUserData] = useState(null);

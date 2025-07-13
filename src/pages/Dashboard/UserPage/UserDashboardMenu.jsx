@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../../hooks/useAuth";
-import { useAccount } from "../../../hooks/useAccount";
-import { useTransaction } from "../../../hooks/useTransaction";
+import { useAuth } from "../../../context/useAuth";
+import { useAccount } from "../../../context/useAccount";
+import { useTransaction } from "../../../context/useTransaction";
 
 export function UserDashboardMenu() {
   const navigate = useNavigate();

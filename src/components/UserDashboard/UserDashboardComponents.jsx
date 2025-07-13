@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAccount } from "../../hooks/useAccount";
+import { useAccount } from "../../context/useAccount";
 
 export default function UserDashboardComponent() {
   const [accounts, setAccounts] = useState([]);

@@ -356,7 +356,7 @@
       "id": "33",
       "transaction_type": "incoming_transfer",
       "account_id_sender": 3,
-      "account_id_receiver": 26,
+      "account_id_receiver": 5,
       "transaction_amount": 400000,
       "transaction_description": "Transfer dari Siti Aminah",
       "transaction_status": "success",
@@ -388,7 +388,7 @@
     {
       "id": "36",
       "transaction_type": "outgoing_transfer",
-      "account_id_sender": 26,
+      "account_id_sender": 11,
       "account_id_receiver": 13,
       "transaction_amount": 500000,
       "transaction_description": "Transfer ke Dian Lestari",
@@ -455,7 +455,7 @@
       "id": "42",
       "transaction_type": "outgoing_transfer",
       "account_id_sender": 27,
-      "account_id_receiver": 26,
+      "account_id_receiver": 29,
       "transaction_amount": 250000,
       "transaction_description": "Transfer ke Vivi Lestari",
       "transaction_status": "success",
@@ -466,7 +466,7 @@
       "id": "43",
       "transaction_type": "deposit",
       "account_id_sender": 31,
-      "account_id_receiver": 26,
+      "account_id_receiver": 31,
       "transaction_amount": 150000,
       "transaction_description": "Setoran tunai",
       "transaction_status": "success",
@@ -477,7 +477,7 @@
       "id": "44",
       "transaction_type": "withdraw",
       "account_id_sender": 33,
-      "account_id_receiver": 26,
+      "account_id_receiver": 33,
       "transaction_amount": 50000,
       "transaction_description": "Penarikan kecil",
       "transaction_status": "success",
@@ -586,7 +586,7 @@
     {
       "id": "54",
       "transaction_type": "withdraw",
-      "account_id_sender": 26,
+      "account_id_sender": 57,
       "account_id_receiver": 57,
       "transaction_amount": 200000,
       "transaction_description": "Penarikan ATM",
@@ -597,7 +597,7 @@
     {
       "id": "55",
       "transaction_type": "deposit",
-      "account_id_sender": 26,
+      "account_id_sender": 59,
       "account_id_receiver": 59,
       "transaction_amount": 300000,
       "transaction_description": "Setoran tunai",
@@ -608,7 +608,7 @@
     {
       "id": "56",
       "transaction_type": "outgoing_transfer",
-      "account_id_sender": 26,
+      "account_id_sender": 61,
       "account_id_receiver": 63,
       "transaction_amount": 400000,
       "transaction_description": "Transfer ke Agus Firmansyah",
@@ -619,7 +619,7 @@
     {
       "id": "57",
       "transaction_type": "deposit",
-      "account_id_sender": 26,
+      "account_id_sender": 65,
       "account_id_receiver": 65,
       "transaction_amount": 500000,
       "transaction_description": "Setoran gaji",
@@ -630,7 +630,7 @@
     {
       "id": "58",
       "transaction_type": "withdraw",
-      "account_id_sender": 26,
+      "account_id_sender": 67,
       "account_id_receiver": 67,
       "transaction_amount": 150000,
       "transaction_description": "Penarikan tunai",
@@ -641,7 +641,7 @@
     {
       "id": "59",
       "transaction_type": "outgoing_transfer",
-      "account_id_sender": 26,
+      "account_id_sender": 69,
       "account_id_receiver": 1,
       "transaction_amount": 250000,
       "transaction_description": "Transfer ke Bima Sakti",
@@ -670,6 +670,17 @@
       "transaction_status": "success",
       "transaction_created_at": "2025-07-13T04:36:15.213Z",
       "transaction_updated_at": "2025-07-13T04:36:15.213Z"
+    },
+    {
+      "id": "62",
+      "transaction_type": "transfer",
+      "account_id_sender": "21",
+      "account_id_receiver": "1",
+      "transaction_amount": 700000,
+      "transaction_description": "makan bubur",
+      "transaction_status": "success",
+      "transaction_created_at": "2025-07-13T06:37:23.239Z",
+      "transaction_updated_at": "2025-07-13T06:37:23.239Z"
     }
   ]
 }
