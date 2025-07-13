@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useTransaction } from "../../../hooks/useTransaction";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useTransaction } from "../../../context/useTransaction";
 
 ChartJS.register(
   CategoryScale,

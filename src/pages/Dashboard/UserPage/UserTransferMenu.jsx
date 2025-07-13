@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useAccount } from "../../../hooks/useAccount";
-import { useTransaction } from "../../../hooks/useTransaction";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAccount } from "../../../context/useAccount";
+import { useTransaction } from "../../../context/useTransaction";
+import { useAuth } from "../../../context/useAuth";
 
 export function UserTransferMenu() {
   const [form, setForm] = useState({
