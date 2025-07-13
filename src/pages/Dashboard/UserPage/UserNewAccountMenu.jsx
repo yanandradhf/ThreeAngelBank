@@ -16,7 +16,7 @@ export function UserNewAccountMenu() {
   };
 
   return (
-    <main className="h-[100%] w-screen bg-gradient-to-br from-emerald-50 to-emerald-100 ps-50 flex items-center justify-center">
+    <main className="ps-50 flex items-center justify-center">
       <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-full max-w-lg flex flex-col mt-40 mb-40 gap-6 mx-4">
         <h2 className="text-2xl font-bold text-emerald-700 mb-2 text-center">Tambah Rekening Baru</h2>
         {/* Tipe Rekening */}

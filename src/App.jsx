@@ -9,6 +9,7 @@ import { UserNewAccountMenu } from "./pages/Dashboard/UserPage/UserNewAccountMen
 import { UserTransferMenu } from "./pages/Dashboard/UserPage/UserTransferMenu";
 import { UserDashboardMenu } from "./pages/Dashboard/UserPage/UserDashboardMenu";
 import { UserAnalyticsMenu } from "./pages/Dashboard/UserPage/UserAnalyticsMenu";
+import { UserDetailMenu } from "./pages/Dashboard/UserPage/UserDetailMenu";
 //import './App.css'
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="newaccount" element={<UserNewAccountMenu />} />
         <Route path="transfer" element={<UserTransferMenu />} />
         <Route path="analytics" element={<UserAnalyticsMenu />} />
+        <Route path="detail" element={<UserDetailMenu />} />
       </Route>
       </Routes>
       </>

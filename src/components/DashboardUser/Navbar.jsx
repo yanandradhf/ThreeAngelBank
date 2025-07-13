@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
+
 export function Navbar() {
-  
+  const navigate = useNavigate();
   return (
     <nav className="bg-gradient-to-r from-[#e6e6e6] to-[#fff] text-emerald-700 p-4 shadow-lg flex items-center justify-between fixed top-0 left-0 w-full z-30 h-16">
       <div className="flex items-center">
@@ -12,7 +14,11 @@ export function Navbar() {
         <span className="text-sm font-medium hidden md:block">
           Halo, Bima Sakti!
         </span>
-        <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-xl font-semibold border-2 border-white shadow-lg hover:shadow-emerald-400 transition-shadow duration-200 cursor-pointer">
+        <div
+          className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-xl font-semibold border-2 border-white shadow-lg hover:shadow-emerald-400 transition-shadow duration-200 cursor-pointer"
+          onClick={() => navigate("/user/dashboard/detail")}
+          title="Lihat Detail User"
+        >
           <img
             src="https://www.mauicardiovascularsymposium.com/wp-content/uploads/2019/08/dummy-profile-pic-300x300.png"
             alt="Profile"

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 export function UserDashboardMenu(){
     const navigate = useNavigate();
     return(
-        <main className="h-[100%] w-screen pt-30 bg-gradient-to-br from-emerald-50 to-emerald-100 ps-50 flex items-center justify-center">
+        <main className="pt-30 ps-50 flex items-center justify-center">
           <div className="max-w-5xl mx-auto pb-30">
             {/* Button Tambah Rekening */}
             <div className="flex justify-end mb-4">

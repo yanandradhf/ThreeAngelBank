@@ -10,7 +10,7 @@ export function DashboardPage() {
     
 
   return (
-    <div>
+    <div className="min-h-[100vh] width-[100vhw] bg-gradient-to-br from-emerald-50 to-emerald-100 flex flex-col">
       {/* NAVBAR */}
       <Navbar />
       {/* SIDEBAR */}
