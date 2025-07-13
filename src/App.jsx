@@ -17,19 +17,22 @@ import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMe
 import { AdminNasabahMenu } from "./pages/Dashboard/AdminPage/AdminNasabahMenu";
 import { AdminDetailMenu } from "./pages/Dashboard/AdminPage/AdminDetailMenu";
 import UnauthorizedPage, { ProtectedRoute } from "./Routes/ProtectedRoute";
+import PublicOnlyRoute from "./Routes/PublicOnlyRoute";
 
 function App() {
   return (
     <>
       <Routes>
-        {/* Auth */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Public hanya untuk user belum login */}
+        <Route element={<PublicOnlyRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
 
-        {/* Unauthorized Page */}
+        {/* Unauthorized */}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-        {/* Admin Protected Routes */}
+        {/* Admin Protected */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route path="/admin/dashboard" element={<MainDashboardAdmin />}>
             <Route index element={<AdminDashboardMenu />} />
@@ -38,7 +41,7 @@ function App() {
           </Route>
         </Route>
 
-        {/* User Protected Routes */}
+        {/* User Protected */}
         <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
           <Route path="/user/dashboard" element={<DashboardPage />}>
             <Route index element={<UserDashboardMenu />} />
@@ -48,6 +51,9 @@ function App() {
             <Route path="detail" element={<UserDetailMenu />} />
           </Route>
         </Route>
+
+        {/* Default root */}
+        <Route path="/" element={<LoginPage />} />
       </Routes>
     </>
   );
