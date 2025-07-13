@@ -30,7 +30,7 @@ function App() {
       <Routes>
         {/* User pages */}
         <Route path="/user/dashboard" element={<DashboardPage />}>
-          <Route index element={<AdminDashboardMenu />} />
+          <Route index element={<UserDashboardMenu />} />
           <Route path="newaccount" element={<UserNewAccountMenu />} />
           <Route path="transfer" element={<UserTransferMenu />} />
           <Route path="analytics" element={<UserAnalyticsMenu />} />
