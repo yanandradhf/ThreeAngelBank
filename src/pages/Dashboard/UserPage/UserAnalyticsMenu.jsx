@@ -11,6 +11,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useTransaction } from "../../../context/useTransaction";
+import { useAccount } from "../../../context/useAccount";
+import { useAuth } from "../../../context/useAuth";
 
 ChartJS.register(
   CategoryScale,
@@ -23,27 +25,49 @@ ChartJS.register(
 
 export function UserAnalyticsMenu() {
   const { getAllTransactionsByUser } = useTransaction();
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  const { getAccountsByUserId } = useAccount();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const [transactions, setTransactions] = useState([]);
+  const [accounts, setAccounts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState({ accountId: "", type: "" });
+
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getAllTransactionsByUser(user?.id);
-        setTransactions(data);
+        const txData = await getAllTransactionsByUser(user?.id);
+        setTransactions(txData);
+
+        const accData = await getAccountsByUserId(user?.id);
+        setAccounts(accData);
       } catch (err) {
-        console.error("Gagal memuat transaksi:", err);
+        console.error("Gagal memuat data:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (user?.id) fetchTransactions();
+    if (user?.id) fetchData();
   }, [user?.id]);
 
-  const pemasukan = transactions
+  const accountIds = accounts.map((acc) => String(acc.id));
+
+  const filteredTx = transactions.filter((tx) => {
+    const isOwnAccount = accountIds.includes(String(tx.account_id_sender));
+    const accountMatch = filter.accountId
+      ? String(tx.account_id_sender) === String(filter.accountId)
+      : true;
+    const typeMatch = filter.type ? tx.transaction_type === filter.type : true;
+    return isOwnAccount && accountMatch && typeMatch;
+  });
+
+  const accountInfoMap = accounts.reduce((map, acc) => {
+    map[acc.id] = `${acc.account_type} - ${acc.account_number}`;
+    return map;
+  }, {});
+
+  const pemasukan = filteredTx
     .filter(
       (tx) =>
         tx.transaction_type === "deposit" ||
@@ -51,7 +75,7 @@ export function UserAnalyticsMenu() {
     )
     .reduce((total, tx) => total + Number(tx.transaction_amount), 0);
 
-  const pengeluaran = transactions
+  const pengeluaran = filteredTx
     .filter(
       (tx) =>
         tx.transaction_type === "withdraw" ||
@@ -62,7 +86,7 @@ export function UserAnalyticsMenu() {
   const monthlyStats = Array(12)
     .fill(0)
     .map((_, i) => {
-      const txsPerMonth = transactions.filter((tx) => {
+      const txsPerMonth = filteredTx.filter((tx) => {
         const date = new Date(tx.transaction_created_at);
         return date.getMonth() === i;
       });
@@ -144,6 +168,36 @@ export function UserAnalyticsMenu() {
           User Analytics
         </h2>
 
+        {/* Filter */}
+        <div className="flex flex-wrap gap-4 justify-center">
+          <select
+            value={filter.accountId}
+            onChange={(e) =>
+              setFilter((f) => ({ ...f, accountId: e.target.value }))
+            }
+            className="px-4 py-2 border rounded-lg"
+          >
+            <option value="">Semua Rekening</option>
+            {accounts.map((acc) => (
+              <option key={acc.id} value={acc.id}>
+                {acc.account_number} - {acc.account_type}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={filter.type}
+            onChange={(e) => setFilter((f) => ({ ...f, type: e.target.value }))}
+            className="px-4 py-2 border rounded-lg"
+          >
+            <option value="">Semua Tipe</option>
+            <option value="deposit">Deposit</option>
+            <option value="withdraw">Withdraw</option>
+            <option value="incoming_transfer">Incoming Transfer</option>
+            <option value="outgoing_transfer">Outgoing Transfer</option>
+          </select>
+        </div>
+
         {/* Grafik */}
         <div>
           <Bar data={chartData} options={chartOptions} />
@@ -179,11 +233,12 @@ export function UserAnalyticsMenu() {
                   <th className="py-2">Tanggal</th>
                   <th className="py-2">Deskripsi</th>
                   <th className="py-2">Jumlah</th>
+                  <th className="py-2">Rekening Asal</th>
                   <th className="py-2">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {transactions
+                {filteredTx
                   .slice()
                   .reverse()
                   .map((tx) => (
@@ -213,7 +268,10 @@ export function UserAnalyticsMenu() {
                               tx.transaction_amount
                             ).toLocaleString()}`}
                       </td>
-
+                      <td className="py-2 text-[#434343] text-sm">
+                        {accountInfoMap[tx.account_id_sender] ||
+                          `ID ${tx.account_id_sender}`}
+                      </td>
                       <td className="py-2">
                         <span
                           className={`px-2 py-1 rounded text-xs ${
