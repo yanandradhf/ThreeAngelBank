@@ -16,30 +16,44 @@ import { UserDetailMenu } from "./pages/Dashboard/UserPage/UserDetailMenu";
 import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMenu";
 import { AdminNasabahMenu } from "./pages/Dashboard/AdminPage/AdminNasabahMenu";
 import { AdminDetailMenu } from "./pages/Dashboard/AdminPage/AdminDetailMenu";
+import UnauthorizedPage, { ProtectedRoute } from "./Routes/ProtectedRoute";
+import PublicOnlyRoute from "./Routes/PublicOnlyRoute";
 
 function App() {
   return (
     <>
       <Routes>
-        {/* Auth */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-
-        {/* User Dashboard */}
-        <Route path="/user/dashboard" element={<DashboardPage />}>
-          <Route index element={<UserDashboardMenu />} />
-          <Route path="newaccount" element={<UserNewAccountMenu />} />
-          <Route path="transfer" element={<UserTransferMenu />} />
-          <Route path="analytics" element={<UserAnalyticsMenu />} />
-          <Route path="detail" element={<UserDetailMenu />} />
+        {/* Public hanya untuk user belum login */}
+        <Route element={<PublicOnlyRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Route>
 
-        {/* Admin Dashboard */}
-        <Route path="/admin/dashboard" element={<MainDashboardAdmin />}>
-          <Route index element={<AdminDashboardMenu />} />
-          <Route path="nasabah" element={<AdminNasabahMenu />} />
-          <Route path="detail" element={<AdminDetailMenu />} />
+        {/* Unauthorized */}
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+        {/* Admin Protected */}
+        <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+          <Route path="/admin/dashboard" element={<MainDashboardAdmin />}>
+            <Route index element={<AdminDashboardMenu />} />
+            <Route path="nasabah" element={<AdminNasabahMenu />} />
+            <Route path="detail" element={<AdminDetailMenu />} />
+          </Route>
         </Route>
+
+        {/* User Protected */}
+        <Route element={<ProtectedRoute allowedRoles={["user"]} />}>
+          <Route path="/user/dashboard" element={<DashboardPage />}>
+            <Route index element={<UserDashboardMenu />} />
+            <Route path="newaccount" element={<UserNewAccountMenu />} />
+            <Route path="transfer" element={<UserTransferMenu />} />
+            <Route path="analytics" element={<UserAnalyticsMenu />} />
+            <Route path="detail" element={<UserDetailMenu />} />
+          </Route>
+        </Route>
+
+        {/* Default root */}
+        <Route path="/" element={<LoginPage />} />
       </Routes>
     </>
   );
