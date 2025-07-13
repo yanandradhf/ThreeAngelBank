@@ -4,7 +4,8 @@ import { persist } from "zustand/middleware";
 export const useRegisterStore = create(
   persist(
     (set, get) => ({
-      // Isi state form default
+      // Isi state form defaul
+      //t
       form: {
         user_email: "",
         user_firstname: "",
