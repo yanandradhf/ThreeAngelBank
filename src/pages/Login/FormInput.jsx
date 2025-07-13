@@ -3,34 +3,34 @@
 /* eslint-disable react/jsx-no-undef */
 
 // import { Link } from "react-router-dom"
-import { useForm } from "react-hook-form"
-import { useState } from "react"
-import { HiEye, HiEyeOff } from "react-icons/hi"
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 // import LoginOption from "../../components/LoginOption"
 
 const FormInput = () => {
-  const [password, setPassword] = useState("")
-  const [passwordType, setPasswordType] = useState("password")
+  const [password, setPassword] = useState("");
+  const [passwordType, setPasswordType] = useState("password");
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value)
-  }
+    setPassword(e.target.value);
+  };
 
   const togglePasswordVisible = () => {
     if (passwordType === "text") {
-      setPasswordType("text")
-      return
+      setPasswordType("text");
+      return;
     } else {
-      setPasswordType("password")
+      setPasswordType("password");
     }
-  }
+  };
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm()
+  } = useForm();
 
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = (data) => console.log(data);
 
   return (
     // <div className="flex w-screen sm:w-[576px] px-8 py-8 flex-col justify-center gap-[23px]">
@@ -193,7 +193,7 @@ const FormInput = () => {
         <LoginOption /> */}
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default FormInput
+export default FormInput;
