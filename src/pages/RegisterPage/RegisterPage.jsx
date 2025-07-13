@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import RegisterStep1 from "../../components/Register/RegisterStep1";
-import RegisterStep2 from "../../components/Register/RegisterStep2";
-import RegisterStep3 from "../../components/Register/RegisterStep3";
+import { RegisterStep1 } from "../../components/Register/RegisterStep1";
+import { RegisterStep2 } from "../../components/Register/RegisterStep2";
+import { RegisterStep3 } from "../../components/Register/RegisterStep3";
 import { useRegisterStore } from "../../stores/registerStore";
 
-export default function RegisterPage() {
+export function RegisterPage() {
   const { step } = useRegisterStore();
   const progressPercent = (step / 3) * 100;
 

@@ -12,7 +12,7 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { UserNewAccountMenu } from "./pages/Dashboard/UserPage/UserNewAccountMenu";
 import { UserDashboardMenu } from "./pages/Dashboard/UserPage/UserDashboardMenu";
 import { UserTransferMenu } from "./pages/Dashboard/UserPage/UserTransferMenu";
-import { RegisterPage } from "./pages/RegisterPage";
+import { RegisterPage } from "./pages/RegisterPage/RegisterPage";
 import { UserAnalyticsMenu } from "./pages/Dashboard/UserPage/UserAnalyticsMenu";
 import { UserDetailMenu } from "./pages/Dashboard/UserPage/UserDetailMenu";
 //import './App.css'
