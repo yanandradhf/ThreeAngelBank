@@ -659,6 +659,17 @@
       "transaction_status": "success",
       "transaction_created_at": "2024-07-13T18:00:00Z",
       "transaction_updated_at": "2024-07-13T18:00:00Z"
+    },
+    {
+      "id": "61",
+      "transaction_type": "transfer",
+      "account_id_sender": "21",
+      "account_id_receiver": "1",
+      "transaction_amount": 300000,
+      "transaction_description": "makan pindang",
+      "transaction_status": "success",
+      "transaction_created_at": "2025-07-13T04:36:15.213Z",
+      "transaction_updated_at": "2025-07-13T04:36:15.213Z"
     }
   ]
 }
