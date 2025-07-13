@@ -5,8 +5,6 @@ export function Sidebar() {
   const navItems = [
     { name: "Dashboard", path: "/admin/dashboard" },
     { name: "User Management", path: "/admin/dashboard/user" },
-    { name: "Transaction Management", path: "/admin/dashboard/transaction" },
-    { name: "Analytics", path: "/admin/dashboard/transaction" },
     
   ];
   return (

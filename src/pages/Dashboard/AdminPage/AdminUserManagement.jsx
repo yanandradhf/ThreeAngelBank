@@ -90,7 +90,7 @@ console.log("Search term:", searchTerm);
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg shadow border">
+        <div className="overflow-x-auto rounded-lg shadow border items-center ">
           <table className="min-w-full bg-white text-left">
             <thead className="bg-emerald-100 text-emerald-700">
               <tr>
