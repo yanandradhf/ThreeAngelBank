@@ -12,12 +12,13 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { UserNewAccountMenu } from "./pages/Dashboard/UserPage/UserNewAccountMenu";
 import { UserDashboardMenu } from "./pages/Dashboard/UserPage/UserDashboardMenu";
 import { UserTransferMenu } from "./pages/Dashboard/UserPage/UserTransferMenu";
-import { RegisterPage } from "./pages/RegisterPage";
+
 import { UserAnalyticsMenu } from "./pages/Dashboard/UserPage/UserAnalyticsMenu";
 import { UserDetailMenu } from "./pages/Dashboard/UserPage/UserDetailMenu";
-//import './App.css'
-import Login from "./pages/Login";
+
 import Register from "./pages/RegisterPage";
+
+//import './App.css'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -26,7 +27,6 @@ function App() {
     <>
       {/* <DashboardPage /> */}
       <Routes>
-        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user/dashboard" element={<DashboardPage />}>

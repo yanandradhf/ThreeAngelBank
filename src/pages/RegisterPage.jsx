@@ -4,7 +4,7 @@ import { RegisterStep2 } from "../components/Register/RegisterStep2";
 import { RegisterStep3 } from "../components/Register/RegisterStep3";
 import { useRegisterStore } from "../stores/registerStore";
 
-export function RegisterPage() {
+export default function RegisterPage() {
   const { step } = useRegisterStore();
   const progressPercent = (step / 3) * 100;
 
