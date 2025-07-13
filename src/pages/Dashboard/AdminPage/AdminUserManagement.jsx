@@ -7,7 +7,8 @@ export function AdminUserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  
+  const [searchTerm, setSearchTerm] = useState(""); 
+
 
   const fetchUsers = async () => {
     try {
@@ -38,16 +39,26 @@ export function AdminUserManagement() {
     }
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
+const [currentPage, setCurrentPage] = useState(1);
 const itemsPerPage = 5;
+
+  // Filter berdasarkan nama / email / kota
+const filteredUsers = users.filter((user) => {
+    const fullName = `${user.user_firstname} ${user.user_lastname}`.toLowerCase();
+    return (
+      fullName.includes(searchTerm.toLowerCase()) ||
+      user.user_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.user_city?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
 // Hitung data yg akan ditampilkan di halaman ini
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentUsers = users.slice(indexOfFirstItem, indexOfLastItem);
+const currentUsers = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
 
 // Hitung jumlah halaman
-const totalPages = Math.ceil(users.length / itemsPerPage);
+const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
 // Fungsi ganti halaman
 const goToNextPage = () => {
@@ -57,12 +68,24 @@ const goToNextPage = () => {
 const goToPrevPage = () => {
   if (currentPage > 1) setCurrentPage((prev) => prev - 1);
 };
-
+console.log("Search term:", searchTerm);
   return (
     <main className="p-6 pt-24 max-w-6xl mx-auto ml-64">
       <h1 className="text-2xl font-bold text-emerald-700 mb-6">
         Manajemen Pengguna
       </h1>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Cari nama, email, atau kota..."
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setCurrentPage(1); // reset ke halaman 1
+          }}
+          className="px-4 py-2 border border-gray-300 rounded w-full"
+        />
+      </div>
 
       {loading ? (
         <p>Loading...</p>
@@ -79,7 +102,7 @@ const goToPrevPage = () => {
                 <th className="py-3 px-4">Birthday</th>
                 <th className="py-3 px-4">Phone</th>
                 <th className="py-3 px-4">City</th>
-                <th className="py-3 px-4">Aksi</th>
+                <th className="py-3 px-4">Action</th>
               </tr>
             </thead>
             <tbody>
