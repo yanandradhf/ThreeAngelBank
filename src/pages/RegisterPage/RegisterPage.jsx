@@ -9,7 +9,7 @@ export function RegisterPage() {
   const progressPercent = (step / 3) * 100;
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-cyan-500 to-blue-600 overflow-hidden p-4">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-green-200 via-green-400 to-emerald-500 overflow-hidden p-4">
       {/* Animated Background Circles */}
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute w-72 h-72 bg-white bg-opacity-10 rounded-full -top-10 -left-10 animate-pulse"></div>
@@ -18,15 +18,15 @@ export function RegisterPage() {
       </div>
 
       {/* Main Card */}
-      <div className="relative z-10 w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-blue-900 mb-6">
+      <div className="relative z-10 w-full max-w-lg bg-white bg-opacity-80 backdrop-blur-xl rounded-3xl shadow-2xl p-8">
+        <h2 className="text-3xl font-extrabold text-center text-emerald-800 mb-8 tracking-wide">
           Register (Step {step})
         </h2>
 
         {/* Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
+        <div className="w-full bg-green-100 rounded-full h-3 mb-6">
           <div
-            className="bg-blue-600 h-3 rounded-full transition-all duration-300"
+            className="bg-emerald-600 h-3 rounded-full transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           ></div>
         </div>
@@ -41,7 +41,7 @@ export function RegisterPage() {
       {/* Tombol Back */}
       <Link
         to="/login"
-        className="relative z-10 mt-6 text-white underline hover:text-blue-100 transition"
+        className="relative z-10 mt-6 text-white underline hover:text-green-100 transition"
       >
         &larr; Back to Login
       </Link>
