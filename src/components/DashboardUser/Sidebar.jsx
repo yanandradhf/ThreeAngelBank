@@ -9,6 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../../context/useAuth";
 
 export function Sidebar() {
   const navigate = useNavigate();
@@ -32,8 +33,15 @@ export function Sidebar() {
     },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && user.id) {
+      await logout(user.id);
+    }
+
     navigate("/login");
   };
 

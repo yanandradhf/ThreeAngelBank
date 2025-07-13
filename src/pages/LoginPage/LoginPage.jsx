@@ -16,12 +16,9 @@ export function LoginPage() {
   // 👉 Cek user di localStorage, kalau ada langsung redirect ke dashboard sesuai role
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      if (user.user_role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
+    if (user?.session_token) {
+      if (user.user_role === "admin") navigate("/admin/dashboard");
+      else navigate("/user/dashboard");
     }
   }, [navigate]);
 

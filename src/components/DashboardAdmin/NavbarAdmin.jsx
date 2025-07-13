@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { motion } from "framer-motion";
+import { useAuth } from "../../context/useAuth";
 
 export function NavbarAdmin() {
   const navigate = useNavigate();
@@ -14,8 +15,15 @@ export function NavbarAdmin() {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && user.id) {
+      await logout(user.id);
+    }
+
     navigate("/login");
   };
 
