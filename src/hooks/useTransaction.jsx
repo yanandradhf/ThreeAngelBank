@@ -6,18 +6,15 @@ const API_MOCKAPI =
 
 export function useTransaction() {
   const getAllTransactionsByUser = async (userId) => {
-    // 1. Ambil semua akun milik user
     const accountRes = await axios.get(`${API_MOCKAPI}/accounts`, {
       params: { user_id: userId },
     });
     const userAccounts = accountRes.data;
     const userAccountIds = userAccounts.map((acc) => String(acc.id));
 
-    // 2. Ambil semua transaksi
     const txRes = await axios.get(`${API_JSON_SERVER}/transactions`);
     const allTx = txRes.data;
 
-    // 3. Filter transaksi yg terkait user dan tandai transfer masuk/keluar
     const result = allTx
       .filter(
         (tx) =>
@@ -52,14 +49,14 @@ export function useTransaction() {
     const now = new Date().toISOString();
 
     try {
-      // 1️⃣ Cari ID terakhir dari transaksi JSON Server
+      // Ambil semua transaksi untuk menentukan ID baru
       const txRes = await axios.get(`${API_JSON_SERVER}/transactions`);
       const maxId = txRes.data.reduce((max, tx) => {
-        return typeof tx.id === "number" ? Math.max(max, tx.id) : max;
+        const idNum = parseInt(tx.id);
+        return isNaN(idNum) ? max : Math.max(max, idNum);
       }, 0);
-      const newId = maxId + 1;
+      const newId = String(maxId + 1); // <-- ID harus string
 
-      // 2️⃣ Buat transaksi baru
       const newTransaction = {
         id: newId,
         transaction_type,
@@ -72,15 +69,12 @@ export function useTransaction() {
         transaction_updated_at: now,
       };
 
-      // 3️⃣ Ambil akun pengirim
+      // Ambil akun pengirim
       const senderRes = await axios.get(
         `${API_MOCKAPI}/accounts/${String(account_id_sender)}`
       );
       const sender = senderRes.data;
 
-      console.log("📦 Data akun pengirim:", sender);
-
-      // 4️⃣ Hitung saldo baru pengirim
       let updatedSenderBalance = Number(sender.account_balance);
       if (transaction_type === "deposit") {
         updatedSenderBalance += Number(transaction_amount);
@@ -88,23 +82,18 @@ export function useTransaction() {
         updatedSenderBalance -= Number(transaction_amount);
       }
 
-      // 5️⃣ Kirim PUT update saldo pengirim
       const updatedSender = {
         ...sender,
         account_balance: updatedSenderBalance,
         account_updated_at: now,
       };
 
-      console.log("📤 Akan PUT akun pengirim:", updatedSender);
-
-      const putSender = await axios.put(
+      await axios.put(
         `${API_MOCKAPI}/accounts/${String(sender.id)}`,
         updatedSender
       );
 
-      console.log("✅ PUT saldo pengirim berhasil:", putSender.data);
-
-      // 6️⃣ Kalau transfer, update akun penerima
+      // Jika transfer ke akun lain, update penerima
       if (
         transaction_type === "transfer" &&
         account_id_receiver !== account_id_sender
@@ -114,8 +103,6 @@ export function useTransaction() {
         );
         const receiver = receiverRes.data;
 
-        console.log("📦 Data akun penerima:", receiver);
-
         const updatedReceiver = {
           ...receiver,
           account_balance:
@@ -123,21 +110,16 @@ export function useTransaction() {
           account_updated_at: now,
         };
 
-        console.log("📤 Akan PUT akun penerima:", updatedReceiver);
-
-        const putReceiver = await axios.put(
+        await axios.put(
           `${API_MOCKAPI}/accounts/${String(receiver.id)}`,
           updatedReceiver
         );
-
-        console.log("✅ PUT saldo penerima berhasil:", putReceiver.data);
-        console.log("📤 Akan simpan transaksi:", newTransaction);
       }
+
       const txPost = await axios.post(
         `${API_JSON_SERVER}/transactions`,
         newTransaction
       );
-      console.log("✅ Transaksi disimpan di json-server:", txPost.data);
 
       return txPost.data;
     } catch (err) {
