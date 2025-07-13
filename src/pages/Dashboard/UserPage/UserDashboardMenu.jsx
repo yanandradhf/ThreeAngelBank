@@ -32,7 +32,7 @@ export function UserDashboardMenu() {
         const fetchedTransactions = await getAllTransactionsByUser(
           localUser.id
         );
-        setTransactions(fetchedTransactions.slice(-3).reverse()); // ambil 3 transaksi terakhir
+        setTransactions(fetchedTransactions.slice(-3).reverse());
       } catch (err) {
         console.error("❌ Error loading dashboard data:", err);
       }
@@ -42,13 +42,13 @@ export function UserDashboardMenu() {
   }, []);
 
   return (
-    <main className="pt-30 ps-50 flex items-center justify-center">
-      <div className="max-w-5xl mx-auto pb-30">
+    <main className="pt-24 ps-50 flex items-center justify-center">
+      <div className="max-w-5xl mx-auto pb-24 w-full px-4">
         {/* Tombol Tambah Rekening */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-6">
           <button
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition-colors duration-200 flex items-center gap-2"
             onClick={() => navigate("newaccount")}
+            className="bg-gradient-to-r from-emerald-600 to-emerald-500 hover:to-emerald-700 text-white font-semibold px-5 py-3 rounded-lg shadow-lg transition duration-200 flex items-center gap-2"
           >
             <svg
               className="w-5 h-5"
@@ -68,84 +68,95 @@ export function UserDashboardMenu() {
         </div>
 
         {/* Ringkasan Rekening */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {accounts.map((acc) => (
             <div
               key={acc.id}
-              className="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border border-emerald-100"
+              className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 flex flex-col items-center hover:shadow-emerald-200 transition"
             >
-              <span className="text-sm text-gray-500 mb-2">
+              <span className="text-sm text-gray-500 mb-1">
                 {acc.account_type}
               </span>
-              <span className="text-2xl font-bold text-emerald-700 mb-2">
+              <span className="text-3xl font-bold text-emerald-700 mb-2">
                 Rp {Number(acc.account_balance).toLocaleString()}
               </span>
               <span className="text-xs text-gray-400">
-                No. Rekening: {acc.account_number}
+                No. Rek: {acc.account_number}
               </span>
             </div>
           ))}
         </div>
 
         {/* Ringkasan Transaksi */}
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-emerald-100">
-          <h2 className="text-xl font-semibold text-emerald-700 mb-4">
-            Ringkasan Transaksi Terakhir
+        <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6">
+          <h2 className="text-2xl font-bold text-emerald-700 mb-6">
+            📊 Ringkasan Transaksi Terakhir
           </h2>
-          <table className="w-full text-left">
-            <thead>
-              <tr className="text-gray-500 text-sm border-b">
-                <th className="py-2">Tanggal</th>
-                <th className="py-2">Deskripsi</th>
-                <th className="py-2">Jumlah</th>
-                <th className="py-2">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((tx) => (
-                <tr key={tx.id} className="border-b">
-                  <td className="py-2 text-[#434343]">
-                    {new Date(tx.transaction_created_at).toLocaleDateString()}
-                  </td>
-                  <td className="py-2 text-[#434343]">
-                    {tx.transaction_description}
-                  </td>
-                  <td
-                    className={`py-2 font-semibold ${
-                      tx.transaction_type === "deposit" ||
-                      tx.transaction_type === "incoming_transfer"
-                        ? "text-emerald-600"
-                        : "text-red-500"
-                    }`}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-separate border-spacing-y-2">
+              <thead>
+                <tr className="text-gray-500 text-sm">
+                  <th className="py-2">Tanggal</th>
+                  <th className="py-2">Deskripsi</th>
+                  <th className="py-2">Jumlah</th>
+                  <th className="py-2">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((tx) => (
+                  <tr
+                    key={tx.id}
+                    className="bg-gray-50 rounded-lg border hover:bg-gray-100 transition"
                   >
-                    {tx.transaction_type === "deposit" ||
-                    tx.transaction_type === "incoming_transfer"
-                      ? "+"
-                      : "-"}
-                    Rp {Number(tx.transaction_amount).toLocaleString()}
-                  </td>
-                  <td className="py-2">
-                    <span
-                      className={`px-2 py-1 rounded text-xs ${
-                        tx.transaction_status === "success"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-yellow-100 text-yellow-700"
+                    <td className="py-3 px-2 text-[#434343] rounded-l-lg">
+                      {new Date(tx.transaction_created_at).toLocaleDateString(
+                        "id-ID"
+                      )}
+                    </td>
+                    <td className="py-3 px-2 text-[#434343]">
+                      {tx.transaction_description}
+                    </td>
+                    <td
+                      className={`py-3 px-2 font-semibold ${
+                        tx.transaction_type === "deposit" ||
+                        tx.transaction_type === "incoming_transfer"
+                          ? "text-emerald-600"
+                          : "text-red-500"
                       }`}
                     >
-                      {tx.transaction_status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {transactions.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="text-center py-4 text-gray-400">
-                    Belum ada transaksi.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                      {tx.transaction_type === "deposit" ||
+                      tx.transaction_type === "incoming_transfer"
+                        ? "+"
+                        : "-"}
+                      Rp {Number(tx.transaction_amount).toLocaleString()}
+                    </td>
+                    <td className="py-3 px-2 rounded-r-lg">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          tx.transaction_status === "success"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-yellow-100 text-yellow-700"
+                        }`}
+                      >
+                        {tx.transaction_status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {transactions.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className="text-center py-6 text-gray-400 text-sm"
+                    >
+                      Belum ada transaksi.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
