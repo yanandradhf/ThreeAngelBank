@@ -48,9 +48,6 @@ export function Navbar() {
             className="w-full h-full object-cover"
           />
         </motion.div>
-
-        {/* Divider */}
-        <div className="h-8 w-px bg-white/30" />
       </div>
     </nav>
   );

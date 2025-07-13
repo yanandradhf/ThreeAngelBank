@@ -12,6 +12,12 @@ export function AdminDashboardMenu() {
   const [transaksiCount, setTransaksiCount] = useState(0);
   const [totalDana, setTotalDana] = useState(0);
   const [rekeningByType, setRekeningByType] = useState({});
+  const [savingCount, setSavingCount] = useState(0);
+  const [payrollCount, setPayrollCount] = useState(0);
+  const [depositCount, setDepositCount] = useState(0);
+  const [activeCount, setActiveCount] = useState(0);
+  const [dormantCount, setDormantCount] = useState(0);
+  const [suspendCount, setSuspendCount] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -32,7 +38,7 @@ export function AdminDashboardMenu() {
 
       // Total dana
       const total = rekeningRes.data.reduce(
-        (acc, item) => acc + Number(item.account_balance),
+        (acc, item) => acc + Number(item.account_balance || 0),
         0
       );
       setTotalDana(total);
@@ -44,13 +50,50 @@ export function AdminDashboardMenu() {
         return acc;
       }, {});
       setRekeningByType(typeCounts);
+
+      // Hitung jumlah rekening spesifik
+      const saving = rekeningRes.data.filter(item => 
+        item.account_type?.toLowerCase() === 'saving' || 
+        item.account_type?.toLowerCase() === 'tabungan'
+      ).length;
+      const payroll = rekeningRes.data.filter(item => 
+        item.account_type?.toLowerCase() === 'payroll' || 
+        item.account_type?.toLowerCase() === 'gaji'
+      ).length;
+      const deposit = rekeningRes.data.filter(item => 
+        item.account_type?.toLowerCase() === 'deposit' || 
+        item.account_type?.toLowerCase() === 'deposito'
+      ).length;
+
+      setSavingCount(saving);
+      setPayrollCount(payroll);
+      setDepositCount(deposit);
+
+      // Hitung jumlah rekening berdasarkan status
+      const active = rekeningRes.data.filter(item => 
+        item.account_status?.toLowerCase() === 'active' || 
+        item.account_status?.toLowerCase() === 'aktif'
+      ).length;
+      const dormant = rekeningRes.data.filter(item => 
+        item.account_status?.toLowerCase() === 'dormant' || 
+        item.account_status?.toLowerCase() === 'tidak aktif'
+      ).length;
+      const suspend = rekeningRes.data.filter(item => 
+        item.account_status?.toLowerCase() === 'suspend' || 
+        item.account_status?.toLowerCase() === 'suspended' ||
+        item.account_status?.toLowerCase() === 'ditangguhkan'
+      ).length;
+
+      setActiveCount(active);
+      setDormantCount(dormant);
+      setSuspendCount(suspend);
     } catch (error) {
       console.error("❌ Error fetching admin dashboard data:", error);
     }
   };
 
   return (
-    <main className="pt-24 ps-50 flex items-center justify-center">
+    <main className="pt-7 flex items-center justify-center">
       <div className="max-w-6xl mx-auto pb-24 w-full px-4">
         {/* Heading */}
         <motion.h1
@@ -60,53 +103,65 @@ export function AdminDashboardMenu() {
           className="text-3xl font-bold text-emerald-700 mb-10"
         >
           Admin Dashboard
-        </motion.h1>
-
-        {/* Summary Cards */}
+        </motion.h1>        {/* Summary Cards */}
         <div className="flex justify-center">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 w-full">
             <Card title="Jumlah Nasabah" value={nasabahCount} icon="👥" />
             <Card title="Jumlah Rekening" value={rekeningCount} icon="💳" />
             <Card title="Jumlah Transaksi" value={transaksiCount} icon="🔄" />
-            <Card
-              title="Total Dana Nasabah"
-              value={`Rp ${totalDana.toLocaleString()}`}
-              icon="💰"
+          </div>
+        </div>
+
+        {/* Total Dana Card - Full Width */}
+        <div className="flex justify-center mb-10">
+          <div className="w-full">
+            <Card 
+              title="Total Dana Nasabah" 
+              value={`Rp ${totalDana.toLocaleString('id-ID')}`} 
+              icon="💰" 
+              isFullWidth={true}
             />
           </div>
         </div>
 
-        {/* Rekening by Type */}
-        <Section title="📂 Rekening Berdasarkan Tipe">
-          <div className="flex justify-center">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 w-full">
-              {Object.entries(rekeningByType).map(([type, count], i) => (
-                <Card key={i} title={type} value={count} />
-              ))}
-
-              {Object.keys(rekeningByType).length === 0 && (
-                <p className="text-gray-400 text-sm">
-                  Belum ada data rekening.
-                </p>
-              )}
+        <Section>
+          <div className="flex justify-center mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              <Card title="Rekening Saving" value={savingCount} icon="💳" />
+              <Card title="Rekening Payroll" value={payrollCount} icon="💼" />
+              <Card title="Rekening Deposit" value={depositCount} icon="🏦" />
             </div>
           </div>
         </Section>
+
+        <Section>
+          <div className="flex justify-center mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+              <Card title="Rekening Active" value={activeCount} icon="✅" />
+              <Card title="Rekening Dormant" value={dormantCount} icon="😴" />
+              <Card title="Rekening Suspend" value={suspendCount} icon="🚫" />
+            </div>
+          </div>
+        </Section>
+
+        
       </div>
     </main>
   );
 }
 
 // Card Component
-function Card({ title, value, icon }) {
+function Card({ title, value, icon, isFullWidth = false }) {
   return (
     <motion.div
       whileHover={{ scale: 1.03 }}
-      className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 text-center flex flex-col items-center"
+      className={`bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 text-center flex flex-col items-center ${
+        isFullWidth ? 'py-8' : ''
+      }`}
     >
-      <div className="text-3xl mb-2">{icon}</div>
-      <h2 className="text-md text-gray-500 mb-1">{title}</h2>
-      <span className="text-2xl font-bold text-emerald-700">{value}</span>
+      <div className={`mb-2 ${isFullWidth ? 'text-4xl' : 'text-3xl'}`}>{icon}</div>
+      <h2 className={`text-gray-500 mb-1 ${isFullWidth ? 'text-lg' : 'text-md'}`}>{title}</h2>
+      <span className={`font-bold text-emerald-700 ${isFullWidth ? 'text-3xl' : 'text-2xl'}`}>{value}</span>
     </motion.div>
   );
 }

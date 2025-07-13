@@ -32,7 +32,7 @@ export function NavbarAdmin() {
       <div className="flex items-center gap-4">
         {/* User Name */}
         <span className="text-sm font-medium hidden md:block">
-          Halo, {userName || "Pengguna"}!
+          Halo, {userName || "Pengguna"}! (Admin)
         </span>
 
         {/* Avatar */}
@@ -48,9 +48,6 @@ export function NavbarAdmin() {
             className="w-full h-full object-cover"
           />
         </motion.div>
-
-        {/* Divider */}
-        <div className="h-8 w-px bg-white/30" />
       </div>
     </nav>
   );

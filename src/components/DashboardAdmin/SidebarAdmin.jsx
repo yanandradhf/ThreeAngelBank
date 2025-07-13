@@ -7,6 +7,7 @@ import {
   LogOut,
   Menu,
   X,
+  Users,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -23,7 +24,7 @@ export function SidebarAdmin() {
     {
       name: "Nasabah",
       path: "/admin/dashboard/nasabah",
-      icon: <LayoutDashboard size={18} />,
+      icon: <Users size={18} />,
     },
   ];
 
