@@ -29,7 +29,7 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/user/dashboard" element={<DashboardPage />}>
           <Route index element={<UserDashboardMenu />} />
           <Route path="newaccount" element={<UserNewAccountMenu />} />

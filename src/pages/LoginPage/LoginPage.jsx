@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ user_email: "", user_password: "" });
   const { login, loading, error } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     const user = await login(form);
@@ -12,6 +14,7 @@ export default function LoginPage() {
     if (user) {
       alert("Login success");
       localStorage.setItem("user", JSON.stringify(user));
+      navigate("../user/dashboard", { replace: true });
     } else {
       alert("Invalid credentials");
     }
@@ -20,7 +23,6 @@ export default function LoginPage() {
   return (
     <div>
       <input
-        className="font-sans text-sm font-medium leading-[21px] text-gray-900"
         name="user_email"
         placeholder="Email"
         onChange={(e) => setForm({ ...form, user_email: e.target.value })}
@@ -31,8 +33,8 @@ export default function LoginPage() {
         type="password"
         onChange={(e) => setForm({ ...form, user_password: e.target.value })}
       />
-      <button onClick={handleLogin} disabled={loading}>
-        Login
+      <button type="submit" onClick={handleLogin} disabled={loading}>
+        {loading ? "Loading..." : "Login"}
       </button>
       {error && <p>{error.message}</p>}
     </div>
