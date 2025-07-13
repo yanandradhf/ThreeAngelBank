@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
-import { useTransaction } from "../../hooks/useTransaction";
-import { useAccount } from "../../hooks/useAccount";
+import { useTransaction } from "../../context/useTransaction";
+import { useAccount } from "../../context/useAccount";
 
 export default function CreateTransaction() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -15,6 +16,8 @@ export default function CreateTransaction() {
   });
   const [receiverInfo, setReceiverInfo] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [checkingReceiver, setCheckingReceiver] = useState(false);
 
   const { getAccountsByUserId } = useAccount();
   const { createTransaction } = useTransaction();
@@ -26,6 +29,7 @@ export default function CreateTransaction() {
   }, [user]);
 
   const handleReceiverCheck = async () => {
+    setCheckingReceiver(true);
     try {
       const res = await fetch(
         `http://localhost:5001/accounts?account_number=${form.account_number_receiver}`
@@ -34,32 +38,56 @@ export default function CreateTransaction() {
       if (data.length === 0) {
         setReceiverInfo(null);
         setError("No rekening tujuan tidak ditemukan.");
+        toast.error("No rekening tujuan tidak ditemukan.");
       } else {
         setReceiverInfo(data[0]);
         setError("");
+        toast.success("Rekening tujuan ditemukan!");
       }
     } catch (err) {
       setError("Gagal mencari rekening.");
+      toast.error("Gagal mencari rekening.");
     }
+    setCheckingReceiver(false);
   };
 
   const handleSubmit = async () => {
     setError("");
+
     if (!form.account_id_sender || !form.transaction_amount) {
       setError("Mohon lengkapi semua kolom.");
+      toast.error("Mohon lengkapi semua kolom.");
       return;
     }
 
-    let receiverId = form.account_id_sender; // default (untuk deposit & withdraw)
-    if (form.transaction_type === "transfer") {
-      if (!receiverInfo) {
-        setError("Rekening tujuan belum dicek atau tidak valid.");
-        return;
-      }
-      receiverId = receiverInfo.id;
+    const senderAccount = accounts.find(
+      (acc) => acc.id === Number(form.account_id_sender)
+    );
+
+    if (!senderAccount) {
+      toast.error("Rekening sumber tidak valid.");
+      return;
     }
 
+    if (form.transaction_type !== "deposit") {
+      if (Number(form.transaction_amount) > senderAccount.account_balance) {
+        toast.error("Saldo tidak mencukupi.");
+        return;
+      }
+    }
+
+    if (form.transaction_type === "transfer" && !receiverInfo) {
+      toast.error("Rekening tujuan belum dicek.");
+      return;
+    }
+
+    let receiverId =
+      form.transaction_type === "transfer"
+        ? receiverInfo.id
+        : form.account_id_sender;
+
     try {
+      setLoading(true);
       await createTransaction({
         transaction_type: form.transaction_type,
         account_id_sender: form.account_id_sender,
@@ -68,7 +96,8 @@ export default function CreateTransaction() {
         transaction_description: form.transaction_description,
       });
 
-      alert("Transaksi berhasil!");
+      toast.success("Transaksi berhasil!");
+
       setForm({
         transaction_type: "deposit",
         account_id_sender: "",
@@ -79,13 +108,17 @@ export default function CreateTransaction() {
       setReceiverInfo(null);
     } catch (err) {
       console.error(err);
-      setError("Transaksi gagal.");
+      toast.error("Transaksi gagal.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-xl mx-auto bg-white p-6 rounded shadow space-y-4">
       <h2 className="text-xl font-bold">Buat Transaksi</h2>
+
+      <Toaster position="top-center" reverseOrder={false} />
 
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
@@ -120,14 +153,15 @@ export default function CreateTransaction() {
             </option>
           ))}
         </select>
-        <label className="block font-medium">Saldo Rekening</label>
-        <label className="block font-medium">
-          {accounts.map((acc) => (
-            <option key={acc.id} value={acc.id}>
-              {acc.account_number} - {acc.account_type}
-            </option>
-          ))}
-        </label>
+
+        {form.account_id_sender && (
+          <p className="text-sm text-gray-600">
+            Saldo: Rp{" "}
+            {accounts
+              .find((a) => a.id === Number(form.account_id_sender))
+              ?.account_balance.toLocaleString()}
+          </p>
+        )}
       </div>
 
       {form.transaction_type === "transfer" && (
@@ -144,9 +178,10 @@ export default function CreateTransaction() {
             />
             <button
               onClick={handleReceiverCheck}
-              className="bg-blue-600 text-white px-3 py-1 rounded"
+              className="bg-blue-600 text-white px-3 py-1 rounded disabled:opacity-60"
+              disabled={checkingReceiver}
             >
-              Cek
+              {checkingReceiver ? "Cek..." : "Cek"}
             </button>
           </div>
           {receiverInfo && (
@@ -184,9 +219,10 @@ export default function CreateTransaction() {
 
       <button
         onClick={handleSubmit}
-        className="w-full bg-green-600 text-white py-2 rounded"
+        className="w-full bg-green-600 text-white py-2 rounded disabled:opacity-60"
+        disabled={loading}
       >
-        Kirim Transaksi
+        {loading ? "Memproses..." : "Kirim Transaksi"}
       </button>
     </div>
   );

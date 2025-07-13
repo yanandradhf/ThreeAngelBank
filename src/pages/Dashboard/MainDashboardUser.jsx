@@ -47,8 +47,33 @@ export default function MainDashboardUser() {
             path="/dashboard/actionTransaction"
             label="📈 Action"
           />
+          <SidebarButton path="/dashboard/profile" label="🙍‍♂️ My Profile" />
         </nav>
 
+        {/* Profile Info */}
+        {user && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-10 p-4 bg-white bg-opacity-20 backdrop-blur-md rounded-xl text-center text-white"
+          >
+            <div className="flex justify-center mb-3">
+              <div className="w-16 h-16 rounded-full bg-indigo-300 flex items-center justify-center text-2xl font-bold shadow-inner">
+                {user.user_firstname.charAt(0)}
+              </div>
+            </div>
+            <h3 className="text-lg font-semibold">
+              {user.user_firstname} {user.user_lastname}
+            </h3>
+            <p className="text-sm text-blue-100">{user.user_email}</p>
+            <p className="text-xs mt-1 bg-blue-600 inline-block px-2 py-1 rounded-full">
+              {user.user_role}
+            </p>
+          </motion.div>
+        )}
+
+        {/* Logout */}
         <button
           onClick={handleLogout}
           className="mt-auto bg-red-400 hover:bg-red-500 text-white font-semibold py-2 rounded-xl transition"

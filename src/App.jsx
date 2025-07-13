@@ -7,8 +7,7 @@ import MainDashboardUser from "./pages/Dashboard/MainDashboardUser";
 import UserDashboardComponent from "./components/UserDashboard/UserDashboardComponents";
 import UserTransactions from "./components/UserDashboard/TransactionComponent";
 import CreateTransaction from "./components/UserDashboard/ActionTransaction";
-
-//import './App.css'
+import DetailUser from "./components/UserDashboard/DetailUser"; // 👉 Import komponen detail user
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +22,8 @@ function App() {
           <Route index element={<UserDashboardComponent />} />
           <Route path="transactions" element={<UserTransactions />} />
           <Route path="actionTransaction" element={<CreateTransaction />} />
+          <Route path="profile" element={<DetailUser />} />{" "}
+          {/*  Tambah route profile */}
         </Route>
       </Routes>
     </>

@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { useTransaction } from "../../hooks/useTransaction";
+import { useTransaction } from "../../context/useTransaction";
 
 // Warna untuk tiap jenis transaksi
 const COLORS = {

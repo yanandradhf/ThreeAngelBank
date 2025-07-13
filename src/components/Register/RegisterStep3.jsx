@@ -1,8 +1,8 @@
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../context/useAuth";
 import { useRegisterStore } from "../../stores/registerStore";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useAccount } from "../../hooks/useAccount";
+import { useAccount } from "../../context/useAccount";
 
 export default function RegisterStep3() {
   const { form, prevStep } = useRegisterStore();
