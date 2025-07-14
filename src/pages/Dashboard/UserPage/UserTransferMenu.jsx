@@ -128,25 +128,25 @@ export function UserTransferMenu() {
   };
 
   return (
-    <main className="ps-50 flex items-center justify-center">
+    <main className="flex items-center justify-center pt-16 pb-10 min-h-screen bg-slate-50">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-3xl shadow-2xl border border-emerald-100 p-10 w-full max-w-lg flex flex-col mt-32 mb-32 gap-6 mx-4"
+        className="bg-white rounded-3xl shadow-2xl border border-emerald-100 p-4 sm:p-8 md:p-10 w-full max-w-md flex flex-col gap-5 mx-2"
       >
-        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-400 bg-clip-text text-transparent text-center mb-6 tracking-wide">
+        <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-400 bg-clip-text text-transparent text-center mb-2 sm:mb-6 tracking-wide">
           💸 Transfer Dana
         </h2>
 
         {/* Jenis Transaksi */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">
             Jenis Transaksi
           </label>
           <select
             name="transactionType"
             value={form.transactionType}
             onChange={handleChange}
-            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
             required
           >
             <option value="withdraw">Withdraw</option>
@@ -156,14 +156,14 @@ export function UserTransferMenu() {
 
         {/* Rekening Sumber */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">
             Rekening Sumber
           </label>
           <select
             name="sourceAccount"
             value={form.sourceAccount}
             onChange={handleChange}
-            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
             required
           >
             <option value="">Pilih rekening</option>
@@ -179,42 +179,41 @@ export function UserTransferMenu() {
         {/* Rekening Tujuan */}
         {form.transactionType === "transfer" && (
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-2">
+            <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">
               Rekening Tujuan
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 name="destinationAccount"
                 value={form.destinationAccount}
                 onChange={handleChange}
-                className="flex-1 px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+                className="flex-1 px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
                 placeholder="Masukkan nomor rekening"
                 required
               />
               <button
                 type="button"
                 onClick={handleSearchDestination}
-                className="px-4 py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors shadow"
+                className="px-4 py-2 sm:px-4 sm:py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors shadow text-sm"
               >
                 Cari
               </button>
             </div>
             {destinationInfo && (
-              <p className="text-sm text-green-600 mt-2">
-                Ditemukan: <strong>{destinationInfo.name}</strong> (
-                {destinationInfo.type})
+              <p className="text-xs sm:text-sm text-green-600 mt-1">
+                Ditemukan: <strong>{destinationInfo.name}</strong> ({destinationInfo.type})
               </p>
             )}
             {destinationError && (
-              <p className="text-sm text-red-600 mt-2">{destinationError}</p>
+              <p className="text-xs sm:text-sm text-red-600 mt-1">{destinationError}</p>
             )}
           </div>
         )}
 
         {/* Jumlah */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">
             Jumlah
           </label>
           <input
@@ -222,7 +221,7 @@ export function UserTransferMenu() {
             name="amount"
             value={form.amount}
             onChange={handleChange}
-            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
             placeholder="Masukkan jumlah"
             required
             min="1"
@@ -231,16 +230,16 @@ export function UserTransferMenu() {
 
         {/* Deskripsi */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">
+          <label className="block text-xs sm:text-sm font-medium text-gray-600 mb-1">
             Deskripsi
           </label>
           <textarea
             name="description"
             value={form.description}
             onChange={handleChange}
-            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
             placeholder="Deskripsi transfer (opsional)"
-            rows={3}
+            rows={2}
           />
         </div>
 
@@ -248,7 +247,7 @@ export function UserTransferMenu() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md"
+          className="w-full py-2 sm:py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors shadow-md text-base"
         >
           {loading ? "Memproses..." : "Kirim Dana"}
         </button>

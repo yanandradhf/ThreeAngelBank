@@ -43,20 +43,27 @@ export function UserNewAccountMenu() {
   };
 
   return (
-    <main className="ps-50 flex items-center justify-center min-h-screen bg-gray-50">
+    <main className="flex items-center justify-center min-h-screen pt-20 pb-10 bg-gray-50">
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-full max-w-lg flex flex-col gap-6 mx-4 mt-24 mb-24"
+        className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-4 sm:p-8 w-full max-w-xs sm:max-w-md flex flex-col gap-6 mx-2"
       >
-        <h2 className="text-3xl font-extrabold text-emerald-700 mb-6 text-center">
-          📄 Buat Rekening Baru
-        </h2>
+        <div className="flex flex-col items-center gap-4 mb-2">
+          <span className="bg-gray-100 rounded-full p-3 mb-2">
+            <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </span>
+          <h2 className="text-xl sm:text-2xl font-extrabold text-emerald-700 text-center">
+            Buat Rekening Baru
+          </h2>
+        </div>
 
         {/* Tipe Rekening */}
         <div>
           <label
             htmlFor="account_type"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
           >
             Pilih Tipe Rekening
           </label>
@@ -65,7 +72,7 @@ export function UserNewAccountMenu() {
             name="account_type"
             value={form.account_type}
             onChange={handleChange}
-            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
             required
           >
             <option value="saving">Saving</option>
@@ -78,7 +85,7 @@ export function UserNewAccountMenu() {
         <div>
           <label
             htmlFor="account_balance"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
           >
             Saldo Awal
           </label>
@@ -88,11 +95,11 @@ export function UserNewAccountMenu() {
             name="account_balance"
             value={form.account_balance}
             onChange={handleChange}
-            className="w-full px-4 py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border text-[#000] border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 bg-gray-50"
             min={50000}
             required
           />
-          <small className="text-gray-400 text-xs mt-1">
+          <small className="text-gray-400 text-xs mt-1 block">
             Minimal saldo awal Rp 50.000
           </small>
         </div>
@@ -101,7 +108,7 @@ export function UserNewAccountMenu() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:to-emerald-700 text-white font-semibold rounded-lg transition-colors shadow-lg"
+          className="w-full py-2 sm:py-3 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:to-emerald-700 text-white font-semibold rounded-lg transition-colors shadow-lg text-base"
         >
           {loading ? "Menyimpan..." : "Tambah Rekening"}
         </button>

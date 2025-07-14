@@ -1,5 +1,4 @@
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 
 const API_URL = "https://687288d776a5723aacd50eeb.mockapi.io/ThreeAngelsBank";
 
@@ -28,7 +27,6 @@ export function useAuth() {
         ...formData,
         id: maxId + 1,
         user_role: "user",
-        session_token: "",
         user_created_at: new Date().toISOString(),
         user_update_at: new Date().toISOString(),
       };
@@ -44,75 +42,46 @@ export function useAuth() {
   // ✅ LOGIN USER
   const login = async ({ user_email, user_password }) => {
     try {
-      // Validasi input
+      // Validasi input kosong
       if (!user_email || !user_password) {
         throw new Error("Email dan password wajib diisi.");
       }
-  
+
+      // Validasi format email
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(user_email)) {
         throw new Error("Format email tidak valid.");
       }
-  
+
+      // Validasi panjang password
       if (user_password.length < 8) {
         throw new Error("Password minimal 8 karakter.");
       }
-  
-      // Ambil semua user
+
+      // Fetch semua user
       const res = await axios.get(`${API_URL}/users`);
       const users = res.data;
-  
+
       // Cari user yang cocok
       const foundUser = users.find(
-        (u) =>
-          u.user_email === user_email &&
-          u.user_password === user_password
+        (u) => u.user_email === user_email && u.user_password === user_password
       );
-  
+
       if (!foundUser) {
         throw new Error("Email atau password salah.");
       }
-  
-      // Cek apakah user sudah login di tempat lain
-      if (foundUser.session_token) {
-        throw new Error("Akun ini sedang login di perangkat lain.");
-      }
-  
-      // Generate token dan update user
-      const token = uuidv4();
-  
-      await axios.put(`${API_URL}/users/${foundUser.id}`, {
-        ...foundUser,
-        session_token: token,
-        user_update_at: new Date().toISOString(),
-      });
-  
-      // Simpan ke localStorage
-      const updatedUser = { ...foundUser, session_token: token };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-  
-      return updatedUser;
+
+      // Kalau ketemu return user-nya
+      return foundUser;
     } catch (err) {
       console.error("Login error:", err);
+      // Kalau dia error custom dari validasi di atas, tampilkan message-nya
       throw err;
     }
   };
 
   // ✅ LOGOUT USER
-  const logout = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.id) {
-      try {
-        await axios.put(`${API_URL}/users/${user.id}`, {
-          ...user,
-          session_token: "", // Kosongkan session
-          user_update_at: new Date().toISOString(),
-        });
-      } catch (err) {
-        console.error("Logout error:", err);
-      }
-    }
-  
+  const logout = () => {
     localStorage.removeItem("user");
   };
 

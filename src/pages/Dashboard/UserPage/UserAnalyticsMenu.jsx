@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,14 +14,7 @@ import { useTransaction } from "../../../context/useTransaction";
 import { useAccount } from "../../../context/useAccount";
 import { useAuth } from "../../../context/useAuth";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export function UserAnalyticsMenu() {
   const { getAllTransactionsByUser } = useTransaction();
@@ -53,7 +45,6 @@ export function UserAnalyticsMenu() {
   }, [user?.id]);
 
   const accountIds = accounts.map((acc) => String(acc.id));
-
   const filteredTx = transactions.filter((tx) => {
     const isOwnAccount = accountIds.includes(String(tx.account_id_sender));
     const accountMatch = filter.accountId
@@ -116,18 +107,8 @@ export function UserAnalyticsMenu() {
 
   const chartData = {
     labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agu",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
+      "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul",
+      "Agu", "Sep", "Okt", "Nov", "Des",
     ],
     datasets: [
       {
@@ -149,9 +130,7 @@ export function UserAnalyticsMenu() {
       legend: { position: "top" },
       title: { display: true, text: "Pemasukan & Pengeluaran Bulanan" },
     },
-    scales: {
-      y: { beginAtZero: true },
-    },
+    scales: { y: { beginAtZero: true } },
   };
 
   if (loading) {
@@ -163,25 +142,25 @@ export function UserAnalyticsMenu() {
   }
 
   return (
-    <main className="ps-50 flex items-center justify-center pt-24 pb-24">
+    <main className="flex items-center justify-center pt-20 pb-12 min-h-screen bg-slate-50">
       <motion.div
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white rounded-3xl shadow-2xl border border-emerald-100 p-10 w-full max-w-5xl flex flex-col gap-10 mx-4"
+        className="bg-white rounded-3xl shadow-2xl border border-emerald-100 p-4 sm:p-6 md:p-10 w-full max-w-4xl flex flex-col gap-8 mx-2 sm:mx-4"
       >
-        <h2 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-400 bg-clip-text text-transparent text-center tracking-wide">
+        <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-400 bg-clip-text text-transparent text-center tracking-wide">
           📊 User Financial Analytics
         </h2>
 
         {/* Filter */}
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
           <select
             value={filter.accountId}
             onChange={(e) =>
               setFilter((f) => ({ ...f, accountId: e.target.value }))
             }
-            className="px-4 py-2 border rounded-lg"
+            className="w-full sm:w-60 px-3 py-2 border rounded-lg text-sm"
           >
             <option value="">Semua Rekening</option>
             {accounts.map((acc) => (
@@ -190,11 +169,10 @@ export function UserAnalyticsMenu() {
               </option>
             ))}
           </select>
-
           <select
             value={filter.type}
             onChange={(e) => setFilter((f) => ({ ...f, type: e.target.value }))}
-            className="px-4 py-2 border rounded-lg"
+            className="w-full sm:w-48 px-3 py-2 border rounded-lg text-sm"
           >
             <option value="">Semua Tipe</option>
             <option value="deposit">Deposit</option>
@@ -205,43 +183,41 @@ export function UserAnalyticsMenu() {
         </div>
 
         {/* Grafik */}
-        <div className="rounded-xl overflow-hidden shadow-lg border border-emerald-100 bg-emerald-50/20 p-6">
+        <div className="rounded-xl overflow-x-auto shadow-lg border border-emerald-100 bg-emerald-50/20 p-3 sm:p-6">
           <Bar data={chartData} options={chartOptions} />
         </div>
 
         {/* Summary Card */}
-        <div className="grid grid-cols-3 gap-6">
-          <div className="bg-emerald-50 rounded-xl shadow p-6 flex flex-col items-center border border-emerald-100">
-            <span className="text-sm text-gray-500 mb-2">Total Pemasukan</span>
-            <span className="text-3xl font-bold text-emerald-700 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+          <div className="bg-emerald-50 rounded-xl shadow p-4 sm:p-6 flex flex-col items-center border border-emerald-100">
+            <span className="text-xs sm:text-sm text-gray-500 mb-1">Total Pemasukan</span>
+            <span className="text-xl sm:text-3xl font-bold text-emerald-700 mb-2">
               Rp {pemasukan.toLocaleString()}
             </span>
           </div>
-          <div className="bg-red-50 rounded-xl shadow p-6 flex flex-col items-center border border-red-100">
-            <span className="text-sm text-gray-500 mb-2">
-              Total Pengeluaran
-            </span>
-            <span className="text-3xl font-bold text-red-500 mb-2">
+          <div className="bg-red-50 rounded-xl shadow p-4 sm:p-6 flex flex-col items-center border border-red-100">
+            <span className="text-xs sm:text-sm text-gray-500 mb-1">Total Pengeluaran</span>
+            <span className="text-xl sm:text-3xl font-bold text-red-500 mb-2">
               Rp {pengeluaran.toLocaleString()}
             </span>
           </div>
-          <div className="bg-sky-50 rounded-xl shadow p-6 flex flex-col items-center border border-sky-100">
-            <span className="text-sm text-gray-500 mb-2">Total Transaksi</span>
-            <span className="text-3xl font-bold text-sky-600 mb-2">
+          <div className="bg-sky-50 rounded-xl shadow p-4 sm:p-6 flex flex-col items-center border border-sky-100">
+            <span className="text-xs sm:text-sm text-gray-500 mb-1">Total Transaksi</span>
+            <span className="text-xl sm:text-3xl font-bold text-sky-600 mb-2">
               {transactions.length}
             </span>
           </div>
         </div>
 
         {/* Semua Transaksi */}
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-emerald-100">
-          <h2 className="text-xl font-semibold text-emerald-700 mb-4">
+        <div className="bg-white rounded-xl shadow-lg p-3 sm:p-6 border border-emerald-100">
+          <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 mb-3 sm:mb-4">
             Riwayat Transaksi
           </h2>
-          <div className="overflow-y-auto max-h-80">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[400px] text-left">
               <thead className="sticky top-0 bg-white z-10">
-                <tr className="text-gray-500 text-sm border-b">
+                <tr className="text-gray-500 text-xs sm:text-sm border-b">
                   <th className="py-2">Tanggal</th>
                   <th className="py-2">Deskripsi</th>
                   <th className="py-2">Jumlah</th>
@@ -250,7 +226,7 @@ export function UserAnalyticsMenu() {
                 </tr>
               </thead>
               <tbody>
-                {filteredTx
+                {filteredTx.length > 0 ? filteredTx
                   .slice()
                   .reverse()
                   .map((tx) => (
@@ -260,47 +236,41 @@ export function UserAnalyticsMenu() {
                       transition={{ type: "spring", stiffness: 300 }}
                       className="border-b hover:bg-gray-50 transition-colors"
                     >
-                      <td className="py-3 px-2 text-[#434343]">
-                        {new Date(tx.transaction_created_at).toLocaleDateString(
-                          "id-ID"
-                        )}
+                      <td className="py-2 px-2 text-[#434343] text-xs sm:text-base">
+                        {new Date(tx.transaction_created_at).toLocaleDateString("id-ID")}
                       </td>
-                      <td className="py-3 px-2 text-gray-600">
+                      <td className="py-2 px-2 text-gray-600 text-xs sm:text-base">
                         {tx.transaction_description || tx.transaction_type}
                       </td>
-                      <td
-                        className={`py-3 px-2 font-semibold ${
-                          tx.transaction_type === "withdraw" ||
-                          tx.transaction_type === "outgoing_transfer"
-                            ? "text-red-500"
-                            : "text-green-600"
-                        }`}
-                      >
-                        {tx.transaction_type === "withdraw" ||
-                        tx.transaction_type === "outgoing_transfer"
+                      <td className={`py-2 px-2 font-semibold text-xs sm:text-base ${
+                        tx.transaction_type === "withdraw" || tx.transaction_type === "outgoing_transfer"
+                          ? "text-red-500"
+                          : "text-green-600"
+                      }`}>
+                        {tx.transaction_type === "withdraw" || tx.transaction_type === "outgoing_transfer"
                           ? `-Rp ${Number(tx.transaction_amount).toLocaleString()}`
                           : `+Rp ${Number(tx.transaction_amount).toLocaleString()}`}
                       </td>
-                      <td className="py-2 text-[#434343] text-sm">
+                      <td className="py-2 text-[#434343] text-xs sm:text-sm">
                         {accountInfoMap[tx.account_id_sender] || `ID ${tx.account_id_sender}`}
                       </td>
-                      <td className="py-2 text-[#434343] text-sm">
-                        {accountInfoMap[tx.account_id_sender] ||
-                          `ID ${tx.account_id_sender}`}
-                      </td>
                       <td className="py-2">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            tx.transaction_status === "success"
-                              ? "bg-emerald-100 text-emerald-700"
-                              : "bg-yellow-100 text-yellow-700"
-                          }`}
-                        >
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                          tx.transaction_status === "success"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-yellow-100 text-yellow-700"
+                        }`}>
                           {tx.transaction_status}
                         </span>
                       </td>
                     </motion.tr>
-                  ))}
+                  )) : (
+                    <tr>
+                      <td colSpan={5} className="text-center py-5 text-gray-400 text-xs sm:text-sm">
+                        Belum ada transaksi.
+                      </td>
+                    </tr>
+                  )}
               </tbody>
             </table>
           </div>
@@ -309,5 +279,3 @@ export function UserAnalyticsMenu() {
     </main>
   );
 }
-
-

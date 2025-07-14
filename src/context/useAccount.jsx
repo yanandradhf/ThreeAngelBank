@@ -1,21 +1,19 @@
 import axios from "axios";
-
 const API_URL = "https://687288d776a5723aacd50eeb.mockapi.io/ThreeAngelsBank";
 
 export function useAccount() {
-  const addAccount = async ({ user_id, account_type, account_balance }) => {
-    // Ambil semua akun dulu
+  // Tambah akun baru
+  const addAccount = async (user_id, account_type, account_balance) => {
+    // Ambil semua akun (cari nomor unik)
     const res = await axios.get(`${API_URL}/accounts`);
     const accounts = res.data;
 
-    // Cari max ID numerik untuk bikin nomor unik
+    // Nomor rekening: "001" + 7 digit maxId + "0015"
     const maxId = accounts.reduce((max, acc) => {
       const numericId = parseInt(acc.id, 10);
       return isNaN(numericId) ? max : Math.max(max, numericId);
     }, 0);
-
-    // Generate nomor rekening: "001" + 7 digit dari maxId+1
-    const nextAccountNumber = `001${String(maxId + 1).padStart(7, "0")}`;
+    const nextAccountNumber = "001" + String(maxId + 1).padStart(7, "0") + "0015";
 
     const newAccount = {
       user_id,
@@ -32,9 +30,7 @@ export function useAccount() {
   };
 
   const getAccountsByUserId = async (user_id) => {
-    const res = await axios.get(`${API_URL}/accounts`, {
-      params: { user_id },
-    });
+    const res = await axios.get(`${API_URL}/accounts`, { params: { user_id } });
     return res.data;
   };
 
@@ -46,9 +42,5 @@ export function useAccount() {
     return found || null;
   };
 
-  return {
-    addAccount,
-    getAccountsByUserId,
-    getAccountByNumber,
-  };
+  return { addAccount, getAccountsByUserId, getAccountByNumber };
 }
