@@ -7,9 +7,8 @@ import {
   X,
   Users,
   ArrowLeftCircle,
-  ArrowRightCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/useAuth";
 
 export function SidebarAdmin() {
@@ -41,9 +40,25 @@ export function SidebarAdmin() {
     navigate("/login");
   };
 
+  // ❗ Menyembunyikan sidebar saat lebar layar < 768px
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1024) {
+        setIsOpen(false);
+      } else {
+        setIsOpen(true);
+      }
+    };
+
+    handleResize(); // Jalankan sekali saat komponen mount
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
-      {/* Tombol Toggle Sidebar di luar */}
+      {/* Tombol Toggle Sidebar */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed top-4 left-4 z-50 p-2 bg-emerald-600 text-white rounded-lg shadow-lg hover:bg-emerald-700 transition"
@@ -62,10 +77,10 @@ export function SidebarAdmin() {
             className="fixed top-0 left-0 h-full bg-gradient-to-br from-emerald-600 via-emerald-500 to-green-500 text-white w-64 p-6 shadow-2xl z-40"
             style={{ paddingTop: "4rem" }}
           >
-            {/* Tombol Hide Sidebar di dalam */}
+            {/* Tombol Hide Sidebar */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-white hover:text-emerald-200 transition"
+              className="absolute top-4 right-4 text-white hover:text-emerald-200 transition lg:hidden"
             >
               <ArrowLeftCircle size={24} />
             </button>

@@ -278,16 +278,18 @@ export function UserAnalyticsMenu() {
                       >
                         {tx.transaction_type === "withdraw" ||
                         tx.transaction_type === "outgoing_transfer"
-                          ? `-Rp ${Number(tx.transaction_amount).toLocaleString()}`
-                          : `+Rp ${Number(tx.transaction_amount).toLocaleString()}`}
-                      </td>
-                      <td className="py-2 text-[#434343] text-sm">
-                        {accountInfoMap[tx.account_id_sender] || `ID ${tx.account_id_sender}`}
+                          ? `-Rp ${Number(
+                              tx.transaction_amount
+                            ).toLocaleString()}`
+                          : `+Rp ${Number(
+                              tx.transaction_amount
+                            ).toLocaleString()}`}
                       </td>
                       <td className="py-2 text-[#434343] text-sm">
                         {accountInfoMap[tx.account_id_sender] ||
                           `ID ${tx.account_id_sender}`}
                       </td>
+
                       <td className="py-2">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-semibold ${
@@ -309,5 +311,3 @@ export function UserAnalyticsMenu() {
     </main>
   );
 }
-
-

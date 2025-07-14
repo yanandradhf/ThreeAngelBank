@@ -26,6 +26,8 @@ export function AdminDashboardMenu() {
   const [dormantCount, setDormantCount] = useState(0);
   const [suspendCount, setSuspendCount] = useState(0);
   const [chartData, setChartData] = useState([]);
+  const [chartDataStatus, setChartDataStatus] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -95,13 +97,21 @@ export function AdminDashboardMenu() {
         { name: "Payroll", value: payroll },
         { name: "Deposit", value: deposit },
       ]);
+
+      setChartDataStatus([
+        { name: "Active", value: active },
+        { name: "Dormant", value: dormant },
+        { name: "Suspend", value: suspend },
+      ]);
     } catch (error) {
       console.error("❌ Error fetching admin dashboard data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <main className="pt-7 flex items-center justify-center ms-50">
+    <main className="pt-7 flex items-center justify-center lg:ms-50">
       <div className="max-w-6xl mx-auto pb-24 w-full px-4">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -113,9 +123,24 @@ export function AdminDashboardMenu() {
         </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <Card title="Jumlah Nasabah" value={nasabahCount} icon="👥" />
-          <Card title="Jumlah Rekening" value={rekeningCount} icon="💳" />
-          <Card title="Jumlah Transaksi" value={transaksiCount} icon="🔄" />
+          <Card
+            title="Jumlah Nasabah"
+            value={nasabahCount}
+            icon="👥"
+            loading={loading}
+          />
+          <Card
+            title="Jumlah Rekening"
+            value={rekeningCount}
+            icon="💳"
+            loading={loading}
+          />
+          <Card
+            title="Jumlah Transaksi"
+            value={transaksiCount}
+            icon="🔄"
+            loading={loading}
+          />
         </div>
 
         <div className="mb-10">
@@ -124,50 +149,89 @@ export function AdminDashboardMenu() {
             value={`Rp ${totalDana.toLocaleString("id-ID")}`}
             icon="💰"
             isFullWidth={true}
+            loading={loading}
           />
         </div>
 
         <Section title="Jumlah Rekening per Jenis">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card title="Saving" value={savingCount} icon="💳" />
-            <Card title="Payroll" value={payrollCount} icon="💼" />
-            <Card title="Deposit" value={depositCount} icon="🏦" />
+            <Card title="Saving" value={savingCount} icon="💳" loading={loading} />
+            <Card title="Payroll" value={payrollCount} icon="💼" loading={loading} />
+            <Card title="Deposit" value={depositCount} icon="🏦" loading={loading} />
           </div>
         </Section>
 
         <Section title="Jumlah Rekening per Status">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card title="Active" value={activeCount} icon="✅" />
-            <Card title="Dormant" value={dormantCount} icon="😴" />
-            <Card title="Suspend" value={suspendCount} icon="🚫" />
+            <Card title="Active" value={activeCount} icon="✅" loading={loading} />
+            <Card title="Dormant" value={dormantCount} icon="😴" loading={loading} />
+            <Card title="Suspend" value={suspendCount} icon="🚫" loading={loading} />
           </div>
         </Section>
 
         <Section title="Visualisasi Jenis Rekening">
-          <div className="w-full h-72">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={chartData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  fill="#00b894"
-                  label
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="grid grid-cols-1 md:grid-cols-2">
+
+          <div className="w-full h-72 flex items-center justify-center">
+            {loading ? (
+              // Skeleton lingkaran besar untuk Pie Chart
+              <div className="animate-pulse rounded-full bg-gray-300 w-72 h-72" />
+            ) : (
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#00b894"
+                    label
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+          <div className="w-full h-72 flex items-center justify-center">
+            {loading ? (
+              // Skeleton lingkaran besar untuk Pie Chart
+              <div className="animate-pulse rounded-full bg-gray-300 w-72 h-72" />
+            ) : (
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={chartDataStatus}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#00b894"
+                    label
+                  >
+                    {chartDataStatus.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </div>
           </div>
         </Section>
       </div>
@@ -175,25 +239,50 @@ export function AdminDashboardMenu() {
   );
 }
 
-function Card({ title, value, icon, isFullWidth = false }) {
+function Card({ title, value, icon, isFullWidth = false, loading }) {
   return (
-    <>
-      <motion.div
-        whileHover={{ scale: 1.03 }}
-        className={`bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 text-center flex flex-col items-center ${
-          isFullWidth ? "py-8 col-span-full" : ""
-        }`}
-      >
+    <motion.div
+      whileHover={{ scale: 1.03 }}
+      className={`bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 text-center flex flex-col items-center ${
+        isFullWidth ? "py-8 col-span-full" : ""
+      }`}
+    >
+      {/* Icon */}
+      {loading ? (
+        <div
+          className={`animate-pulse bg-gray-300 rounded-full mb-2 ${
+            isFullWidth ? "h-16 w-16" : "h-12 w-12"
+          }`}
+        />
+      ) : (
         <div className={`mb-2 ${isFullWidth ? "text-4xl" : "text-3xl"}`}>
           {icon}
         </div>
-        <h2
-          className={`text-gray-500 mb-1 ${
-            isFullWidth ? "text-lg" : "text-md"
+      )}
+
+      {/* Title */}
+      {loading ? (
+        <div
+          className={`animate-pulse bg-gray-300 rounded mb-1 ${
+            isFullWidth ? "h-6 w-40" : "h-5 w-28"
           }`}
+        />
+      ) : (
+        <h2
+          className={`text-gray-500 mb-1 ${isFullWidth ? "text-lg" : "text-md"}`}
         >
           {title}
         </h2>
+      )}
+
+      {/* Value */}
+      {loading ? (
+        <div
+          className={`animate-pulse rounded bg-gray-300 ${
+            isFullWidth ? "h-12 w-48 mx-auto" : "h-8 w-24"
+          }`}
+        />
+      ) : (
         <span
           className={`font-bold text-emerald-700 ${
             isFullWidth ? "text-3xl" : "text-2xl"
@@ -201,8 +290,8 @@ function Card({ title, value, icon, isFullWidth = false }) {
         >
           {value}
         </span>
-      </motion.div>
-    </>
+      )}
+    </motion.div>
   );
 }
 
