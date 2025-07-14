@@ -36,7 +36,7 @@ export function AdminDashboardMenu() {
       const [nasabahRes, rekeningRes, transaksiRes] = await Promise.all([
         axios.get(`${API_MOCKAPI}/users`),
         axios.get(`${API_MOCKAPI}/accounts`),
-        axios.get(`${API_JSON_SERVER}/transactions`)
+        axios.get(`${API_JSON_SERVER}/transactions`),
       ]);
 
       setNasabahCount(nasabahRes.data.length);
@@ -177,30 +177,6 @@ export function AdminDashboardMenu() {
 
 function Card({ title, value, icon, isFullWidth = false }) {
   return (
-<<<<<<< HEAD
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      className={`bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 text-center flex flex-col items-center ${
-        isFullWidth ? "py-8 col-span-full" : ""
-      }`}
-    >
-      <div className={`mb-2 ${isFullWidth ? "text-4xl" : "text-3xl"}`}>
-        {icon}
-      </div>
-      <h2
-        className={`text-gray-500 mb-1 ${isFullWidth ? "text-lg" : "text-md"}`}
-      >
-        {title}
-      </h2>
-      <span
-        className={`font-bold text-emerald-700 ${
-          isFullWidth ? "text-3xl" : "text-2xl"
-        }`}
-      >
-        {value}
-      </span>
-    </motion.div>
-=======
     <>
       <motion.div
         whileHover={{ scale: 1.03 }}
@@ -212,7 +188,9 @@ function Card({ title, value, icon, isFullWidth = false }) {
           {icon}
         </div>
         <h2
-          className={`text-gray-500 mb-1 ${isFullWidth ? "text-lg" : "text-md"}`}
+          className={`text-gray-500 mb-1 ${
+            isFullWidth ? "text-lg" : "text-md"
+          }`}
         >
           {title}
         </h2>
@@ -225,7 +203,6 @@ function Card({ title, value, icon, isFullWidth = false }) {
         </span>
       </motion.div>
     </>
->>>>>>> 3925d60260987a151d0005f39c5c27617c778b42
   );
 }
 
@@ -243,10 +220,4 @@ function Section({ title, children }) {
   );
 }
 
-<<<<<<< HEAD
-// Warna Pie Chart
 const COLORS = ["#00b894", "#fdcb6e", "#0984e3"];
-=======
-
-const COLORS = ["#00b894", "#fdcb6e", "#0984e3"];
->>>>>>> 3925d60260987a151d0005f39c5c27617c778b42
