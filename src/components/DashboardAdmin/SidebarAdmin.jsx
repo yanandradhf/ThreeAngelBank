@@ -23,7 +23,7 @@ export function SidebarAdmin() {
     },
     {
       name: "Nasabah",
-      path: "/admin/dashboard/nasabah",
+      path: "/admin/dashboard/user",
       icon: <Users size={18} />,
     },
   ];
