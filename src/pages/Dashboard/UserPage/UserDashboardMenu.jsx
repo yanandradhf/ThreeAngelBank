@@ -65,7 +65,8 @@ export function UserDashboardMenu() {
                 strokeLinejoin="round"
                 d="M12 4v16m8-8H4"
               />
-            </svg>
+            </svg>{" "}
+            Tambah Rekening
             {/*Tambah Rekening*/}
           </button>
         </div>
