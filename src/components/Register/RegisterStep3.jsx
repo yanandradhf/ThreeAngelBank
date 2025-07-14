@@ -45,7 +45,7 @@ export function RegisterStep3() {
       await addAccount({
         user_id: user.id,
         account_type: form.account_type,
-        account_balance: form.account_balance,
+        account_balance: 300000,
       });
 
       alert("Register success!");
