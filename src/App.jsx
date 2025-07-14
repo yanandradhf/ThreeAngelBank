@@ -20,6 +20,7 @@ import UnauthorizedPage, { ProtectedRoute } from "./Routes/ProtectedRoute";
 import PublicOnlyRoute, { RedirectBasedOnAuth } from "./Routes/PublicOnlyRoute";
 import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
 import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
+import { UserCategorizationMenu } from "./pages/Dashboard/UserPage/UserCategorizationMenu";
 // import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
 // import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMenu";
 // import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
@@ -53,6 +54,7 @@ function App() {
             <Route path="newaccount" element={<UserNewAccountMenu />} />
             <Route path="transfer" element={<UserTransferMenu />} />
             <Route path="analytics" element={<UserAnalyticsMenu />} />
+            <Route path="categorize" element={<UserCategorizationMenu />} />
             <Route path="detail" element={<UserDetailMenu />} />
           </Route>
         </Route>
