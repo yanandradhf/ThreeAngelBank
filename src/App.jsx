@@ -17,13 +17,12 @@ import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMe
 import { AdminNasabahMenu } from "./pages/Dashboard/AdminPage/AdminNasabahMenu";
 import { AdminDetailMenu } from "./pages/Dashboard/AdminPage/AdminDetailMenu";
 import UnauthorizedPage, { ProtectedRoute } from "./Routes/ProtectedRoute";
-import PublicOnlyRoute from "./Routes/PublicOnlyRoute";
+import PublicOnlyRoute, { RedirectBasedOnAuth } from "./Routes/PublicOnlyRoute";
 import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
 import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
 // import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
 // import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMenu";
 // import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
-
 
 function App() {
   return (
@@ -59,7 +58,7 @@ function App() {
         </Route>
 
         {/* Default root */}
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<RedirectBasedOnAuth />} />
       </Routes>
     </>
   );

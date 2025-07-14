@@ -6,7 +6,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     watch: {
-      // ⛔ Abaikan perubahan file db.json agar tidak trigger reload
       ignored: ["**/db.json"],
     },
   },
