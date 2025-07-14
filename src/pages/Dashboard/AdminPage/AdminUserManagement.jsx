@@ -55,9 +55,10 @@ export function AdminUserManagement() {
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}
-      className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6"
+      className="p-6"
     >
     <main className="pt-24 ps-50 flex items-center justify-center">
+      <div className="max-w-5xl mx-auto pb-24 w-full px-4">
       <Section title="Data Pengguna">
         {/* Search */}
         <div className="relative mb-6">
@@ -211,6 +212,7 @@ export function AdminUserManagement() {
           </div>
         )}
       </Section>
+      </div>
     </main>
     </motion.div>
   );
