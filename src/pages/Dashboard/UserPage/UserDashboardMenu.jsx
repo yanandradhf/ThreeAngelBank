@@ -123,7 +123,7 @@ export function UserDashboardMenu() {
         {/* Ringkasan Transaksi */}
         <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6">
           <h2 className="text-2xl font-bold text-emerald-700 mb-6">
-            📊 Ringkasan Transaksi Terakhir
+            Ringkasan Transaksi Terakhir
           </h2>
           <div className="overflow-x-auto">
             {loading ? (

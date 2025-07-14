@@ -171,7 +171,7 @@ export function UserAnalyticsMenu() {
         className="bg-white rounded-3xl shadow-2xl border border-emerald-100 p-10 w-full max-w-5xl flex flex-col gap-10 mx-4"
       >
         <h2 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-600 via-emerald-400 to-green-400 bg-clip-text text-transparent text-center tracking-wide">
-          📊 User Financial Analytics
+          User Financial Analytics
         </h2>
 
         {/* Filter */}

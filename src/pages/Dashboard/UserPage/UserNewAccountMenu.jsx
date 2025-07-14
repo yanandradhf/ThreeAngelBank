@@ -49,7 +49,7 @@ export function UserNewAccountMenu() {
         className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-8 w-full max-w-lg flex flex-col gap-6 mx-4 mt-24 mb-24"
       >
         <h2 className="text-3xl font-extrabold text-emerald-700 mb-6 text-center">
-          📄 Buat Rekening Baru
+          Buat Rekening Baru
         </h2>
 
         {/* Tipe Rekening */}
