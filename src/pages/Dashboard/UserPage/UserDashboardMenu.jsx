@@ -82,22 +82,42 @@ export function UserDashboardMenu() {
                   <div className="h-3 bg-gray-200 rounded w-2/3" />
                 </div>
               ))
-            : accounts.map((acc) => (
-                <div
-                  key={acc.id}
-                  className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6 flex flex-col items-center hover:shadow-emerald-200 transition"
-                >
-                  <span className="text-sm text-gray-500 mb-1">
-                    {acc.account_type}
-                  </span>
-                  <span className="text-3xl font-bold text-emerald-700 mb-2">
-                    Rp {Number(acc.account_balance).toLocaleString()}
-                  </span>
-                  <span className="text-xs text-gray-400">
-                    No. Rek: {acc.account_number}
-                  </span>
-                </div>
-              ))}
+            : accounts.map((acc) => {
+                const bgClass =
+                  acc.account_type === "saving"
+                    ? "bg-red-50 border-red-200"
+                    : acc.account_type === "deposito"
+                    ? "bg-sky-50 border-sky-200"
+                    : acc.account_type === "payroll"
+                    ? "bg-amber-50 border-amber-200"
+                    : "bg-gray-50 border-gray-200";
+
+                const textClass =
+                  acc.account_type === "saving"
+                    ? "text-red-700"
+                    : acc.account_type === "deposito"
+                    ? "text-sky-700"
+                    : acc.account_type === "payroll"
+                    ? "text-amber-700"
+                    : "text-gray-700";
+
+                return (
+                  <div
+                    key={acc.id}
+                    className={`rounded-2xl shadow-xl p-6 flex flex-col items-center transition hover:shadow-md ${bgClass}`}
+                  >
+                    <span className="text-sm text-gray-500 mb-1">
+                      {acc.account_type}
+                    </span>
+                    <span className={`text-3xl font-bold mb-2 ${textClass}`}>
+                      Rp {Number(acc.account_balance).toLocaleString()}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      No. Rek: {acc.account_number}
+                    </span>
+                  </div>
+                );
+              })}
         </div>
         {/* Ringkasan Transaksi */}
         <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-6">
