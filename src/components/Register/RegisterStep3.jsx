@@ -38,7 +38,6 @@ export function RegisterStep3() {
         user_birth: form.user_birth,
         user_phone: form.user_phone,
         user_city: form.user_city,
-        account_balance: 300000,
       });
 
       // 2. Register account
@@ -112,7 +111,7 @@ export function RegisterStep3() {
           {/* Saldo Akun */} 
         <div className="grid grid-cols-2 gap-x-4">
               <div className="font-semibold text-gray-700">Saldo Awal</div>   
-          <div className="text-gray-900">{form.account_balance || "-"}</div> 
+          <div className="text-gray-900">{"Rp300.000"}</div> 
         </div>
       </div>
 
