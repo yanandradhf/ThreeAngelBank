@@ -86,7 +86,7 @@ export function UserDashboardMenu() {
                 const bgClass =
                   acc.account_type === "saving"
                     ? "bg-red-50 border-red-200"
-                    : acc.account_type === "deposito"
+                    : acc.account_type === "deposit"
                     ? "bg-sky-50 border-sky-200"
                     : acc.account_type === "payroll"
                     ? "bg-amber-50 border-amber-200"
@@ -95,7 +95,7 @@ export function UserDashboardMenu() {
                 const textClass =
                   acc.account_type === "saving"
                     ? "text-red-700"
-                    : acc.account_type === "deposito"
+                    : acc.account_type === "deposit"
                     ? "text-sky-700"
                     : acc.account_type === "payroll"
                     ? "text-amber-700"

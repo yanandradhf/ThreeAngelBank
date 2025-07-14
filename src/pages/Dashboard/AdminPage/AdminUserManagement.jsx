@@ -57,7 +57,7 @@ export function AdminUserManagement() {
       whileHover={{ scale: 1.01 }}
       className="p-6"
     >
-    <main className="pt-24 ps-50 flex items-center justify-center">
+    <main className="pt-24 ps-0 lg:ps-50 flex items-center justify-center">
       <div className="max-w-5xl mx-auto pb-24 w-full px-4">
       <Section title="Data Pengguna">
         {/* Search */}
@@ -152,10 +152,10 @@ export function AdminUserManagement() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between pt-6 border-t border-gray-100 mt-4">
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 hidden md:flex">
               Halaman {currentPage} dari {totalPages} • Menampilkan {currentUsers.length} dari {filteredUsers.length} pengguna
             </div>
-            <div className="flex space-x-2">
+            <div className="flex justify-between w-full md:w-0 md:justify-end">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
@@ -165,7 +165,7 @@ export function AdminUserManagement() {
                     : "text-emerald-600 hover:bg-emerald-50"
                 }`}
               >
-                ← Sebelumnya
+                ← 
               </button>
 
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
@@ -206,7 +206,7 @@ export function AdminUserManagement() {
                     : "text-emerald-600 hover:bg-emerald-50"
                 }`}
               >
-                Selanjutnya →
+              →
               </button>
             </div>
           </div>

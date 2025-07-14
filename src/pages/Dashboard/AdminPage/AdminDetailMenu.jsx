@@ -26,13 +26,13 @@ export function AdminDetailMenu() {
   }
 
   return (
-    <main className="pt-30 ps-50 pb-30 flex items-center justify-center">
+    <main className="pt-30 lg:ps-50 pb-30 flex items-center justify-center">
       <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 p-10 w-full max-w-xl flex flex-col items-center gap-8 mx-4">
         <div className="flex flex-col items-center gap-4">
           <img
             src="https://www.mauicardiovascularsymposium.com/wp-content/uploads/2019/08/dummy-profile-pic-300x300.png"
             alt="Admin Profile"
-            className="w-28 h-28 rounded-full object-cover border-4 border-emerald-200 shadow"
+            className="w-20 h-20 lg:w-28 lg:h-28 rounded-full object-cover border-4 border-emerald-200 shadow"
           />
           <h2 className="text-2xl font-bold text-emerald-700">
             {adminData.user_firstname} {adminData.user_lastname}
