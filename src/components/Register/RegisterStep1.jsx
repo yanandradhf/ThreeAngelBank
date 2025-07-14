@@ -5,12 +5,17 @@ import axios from "axios";
 const API_URL = "https://687288d776a5723aacd50eeb.mockapi.io/ThreeAngelsBank";
 
 export function RegisterStep1() {
-  const { form, updateForm, nextStep } = useRegisterStore();
+  const { form, updateForm, nextStep, reset } = useRegisterStore();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   console.log(form);
 
   // Validasi ketika klik Next
+
+  const handleBack = () => {
+    navigate("/login");
+    reset();
+  };
   const handleNext = async () => {
     const newErrors = {};
 
@@ -114,7 +119,7 @@ export function RegisterStep1() {
 
       <div className="flex gap-4">
         <button
-          onClick={() => navigate("/login")}
+          onClick={handleBack}
           className="flex-1 bg-gray-300 text-gray-800 py-3 rounded hover:bg-gray-400 transition"
         >
           Back

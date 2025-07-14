@@ -5,6 +5,12 @@ const API_MOCKAPI =
   "https://687288d776a5723aacd50eeb.mockapi.io/ThreeAngelsBank"; // mockapi.io untuk akun
 
 export function useTransaction() {
+
+  const getAllTransactions = async () => {
+    const res = await axios.get(`${API_MOCKAPI}/transactions`);
+    return res.data;
+  };
+
   const getAllTransactionsByUser = async (userId) => {
     const accountRes = await axios.get(`${API_MOCKAPI}/accounts`, {
       params: { user_id: userId },
@@ -141,5 +147,6 @@ export function useTransaction() {
     }
   };
 
-  return { getAllTransactionsByUser, createTransaction };
+  return { getAllTransactions, getAllTransactionsByUser, createTransaction };
+
 }

@@ -18,6 +18,12 @@ import { AdminNasabahMenu } from "./pages/Dashboard/AdminPage/AdminNasabahMenu";
 import { AdminDetailMenu } from "./pages/Dashboard/AdminPage/AdminDetailMenu";
 import UnauthorizedPage, { ProtectedRoute } from "./Routes/ProtectedRoute";
 import PublicOnlyRoute from "./Routes/PublicOnlyRoute";
+import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
+import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
+// import { AdminDashboard } from "./pages/Dashboard/AdminDashboard";
+// import { AdminDashboardMenu } from "./pages/Dashboard/AdminPage/AdminDashboardMenu";
+// import { AdminUserManagement } from "./pages/Dashboard/AdminPage/AdminUserManagement";
+
 
 function App() {
   return (
@@ -34,9 +40,9 @@ function App() {
 
         {/* Admin Protected */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-          <Route path="/admin/dashboard" element={<MainDashboardAdmin />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />}>
             <Route index element={<AdminDashboardMenu />} />
-            <Route path="nasabah" element={<AdminNasabahMenu />} />
+            <Route path="user" element={<AdminUserManagement />} />
             <Route path="detail" element={<AdminDetailMenu />} />
           </Route>
         </Route>

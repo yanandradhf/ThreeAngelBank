@@ -5,11 +5,25 @@ import { useState } from "react";
 import { useAccount } from "../../context/useAccount";
 
 export function RegisterStep3() {
-  const { form, prevStep } = useRegisterStore();
+  const { form, prevStep, reset } = useRegisterStore();
   const { register } = useAuth();
   const { addAccount } = useAccount();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const summaryFields = [
+    { key: "user_email", label: "Email" },
+    { key: "user_firstname", label: "First Name" },
+    { key: "user_lastname", label: "Last Name" },
+    { key: "user_gender", label: "Gender" },
+    { key: "user_birth", label: "Birth Date" },
+    { key: "user_phone", label: "Phone" },
+    { key: "user_city", label: "City" },
+    // { key: "user_password", label: "Password" },
+    // { key: "confirm_password", label: "Confirm Password" },
+    { key: "account_type", label: "Account Type" },
+    { key: "account_balance", label: "Initial Balance" },
+  ];
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -34,6 +48,7 @@ export function RegisterStep3() {
       });
 
       alert("Register success!");
+      reset(); // <-- Reset form & localStorage!
       navigate("/login");
     } catch (err) {
       console.error(err);

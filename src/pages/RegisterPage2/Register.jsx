@@ -5,7 +5,7 @@ import { RegisterStep3 } from "../../components/Register/RegisterStep3";
 import { useRegisterStore } from "../../stores/registerStore";
 
 export function RegisterPage() {
-  const { step } = useRegisterStore();
+  const { step, reset } = useRegisterStore();
   const progressPercent = (step / 3) * 100;
 
   return (
@@ -41,6 +41,7 @@ export function RegisterPage() {
       {/* Tombol Back */}
       <Link
         to="/login"
+        onClick={() => localStorage.removeItem("register-storage")}
         className="relative z-10 mt-6 text-white underline hover:text-green-100 transition"
       >
         &larr; Back to Login
