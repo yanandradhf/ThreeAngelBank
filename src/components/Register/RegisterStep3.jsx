@@ -38,6 +38,7 @@ export function RegisterStep3() {
         user_birth: form.user_birth,
         user_phone: form.user_phone,
         user_city: form.user_city,
+        account_balance: 300000,
       });
 
       // 2. Register account

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/useAuth";
+import { Chart } from "chart.js";
 
 export function Sidebar() {
   const navigate = useNavigate();
@@ -29,6 +30,11 @@ export function Sidebar() {
     {
       name: "Analytics",
       path: "/user/dashboard/analytics",
+      icon: <BarChart2 size={18} />,
+    },
+    {
+      name: "Categorize",
+      path: "/user/dashboard/categorize",
       icon: <BarChart2 size={18} />,
     },
   ];
